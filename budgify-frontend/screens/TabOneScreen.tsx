@@ -1,37 +1,57 @@
-import { StyleSheet } from 'react-native';
-import EditScreenInfo from '../components/EditScreenInfo';
-import { Text, View } from '../components/Themed';
+import { gql, useQuery } from '@apollo/client';
+import { FlatList, StatusBar, StyleSheet, Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { AddRecipe } from '../components/recipe/AddRecipe';
+import { RecipeItem } from '../components/recipe/RecipeItem';
 import { RootTabScreenProps } from '../types';
+
+const GET_RECIPES = gql`
+  query GET_RECIPES {
+    recipes {
+      id
+      title
+      description
+      ingredients
+    }
+  }
+`;
 
 export default function TabOneScreen({
   navigation,
 }: RootTabScreenProps<'TabOne'>) {
+  const { data } = useQuery(GET_RECIPES);
+  const recipes = data?.recipes;
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View
-        style={styles.separator}
-        lightColor='#eee'
-        darkColor='rgba(255,255,255,0.1)'
+    <SafeAreaView style={styles.container}>
+      <AddRecipe />
+      <FlatList
+        data={recipes}
+        renderItem={({ item }) => <RecipeItem recipe={item} />}
+        keyExtractor={(item) => item.id}
+        ListEmptyComponent={
+          <Text style={styles.notFound}>No Recipes found</Text>
+        }
       />
-      <EditScreenInfo path='/screens/TabOneScreen.tsx' />
-    </View>
+    </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: StatusBar.currentHeight || 0,
   },
-  title: {
+  notFound: {
+    borderColor: '#9ca3af',
+    borderWidth: 2,
+    borderRadius: 10,
+    color: '#f87171',
     fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
   },
 });

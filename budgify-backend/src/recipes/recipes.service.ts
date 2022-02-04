@@ -23,6 +23,13 @@ export class RecipesService {
   }
 
   async remove(id: string): Promise<boolean> {
-    return !!this.prisma.recipe.delete({ where: { id: id } });
+    console.log('remove', id);
+    try {
+      await this.prisma.recipe.delete({ where: { id: id } });
+    } catch (error) {
+      // TODO: Log error for recipe not found
+      return false;
+    }
+    return true;
   }
 }
