@@ -1,4 +1,5 @@
 import { gql, useMutation } from '@apollo/client';
+import faker from 'faker';
 import React from 'react';
 import { Pressable, StyleSheet, Text } from 'react-native';
 
@@ -17,7 +18,7 @@ export const AddRecipe = () => {
   const [addRecipe] = useMutation(ADD_RECIPE, {
     variables: {
       newRecipeData: {
-        title: 'recipe ' + new Date().getTime(),
+        title: faker.name.firstName() + ' ' + faker.name.lastName(),
         ingredients: ['ing1', 'ing2'],
       },
     },

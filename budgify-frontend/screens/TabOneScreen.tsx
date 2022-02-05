@@ -12,6 +12,7 @@ const GET_RECIPES = gql`
       title
       description
       ingredients
+      createdAt
     }
   }
 `;

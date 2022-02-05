@@ -15,6 +15,7 @@ interface Props {
     title: string;
     description: string;
     ingredients: string[];
+    createdAt: string;
   };
 }
 
@@ -35,6 +36,9 @@ export const RecipeItem = ({ recipe }: Props) => {
   return (
     <View style={styles.item}>
       <Text style={styles.title}>{recipe.title}</Text>
+      <Text style={styles.date}>
+        {new Date(recipe.createdAt).toLocaleString()}
+      </Text>
       <Pressable style={styles.button} onPress={() => removeRecipe()}>
         <Text style={styles.buttonText}>X</Text>
       </Pressable>
@@ -56,6 +60,11 @@ export const styles = StyleSheet.create({
     color: '#2dd4bf',
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  date: {
+    color: '#2dd4bf',
+    fontSize: 20,
+    marginLeft: 8,
   },
   button: {
     paddingHorizontal: 4,
