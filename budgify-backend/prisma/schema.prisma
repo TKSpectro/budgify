@@ -8,9 +8,9 @@ generator client {
 }
 
 model Recipe {
-  id           String   @id @default(uuid())
-  title        String
-  description  String?
-  ingredients  String[]
-  creationDate DateTime @default(now())
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  ingredients String[]
+  createdAt   DateTime @default(now())
 }
