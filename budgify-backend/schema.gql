@@ -14,9 +14,20 @@ type Recipe {
 """Date custom scalar type"""
 scalar Date
 
+"""user """
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  hashedPassword: String!
+  createdAt: Date!
+  updatedAt: Date!
+}
+
 type Query {
   recipe(id: String!): Recipe!
   recipes(skip: Int = 0, take: Int = 25): [Recipe!]!
+  me: User!
 }
 
 type Mutation {

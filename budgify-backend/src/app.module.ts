@@ -3,6 +3,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 import { PrismaModule } from './prisma/prisma.module';
 import { RecipesModule } from './recipes/recipes.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { RecipesModule } from './recipes/recipes.module';
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
     RecipesModule,
+    UserModule,
   ],
 })
 export class AppModule {}
