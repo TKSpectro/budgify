@@ -9,8 +9,8 @@
                 "reveal": "always",
                 "panel": "new",
                 "group": "develop"
-            },
-            "runOptions": { "runOn": "folderOpen" }
+            }
+            // "runOptions": { "runOn": "folderOpen" }
         },
         {
             "label": "Frontend",
@@ -20,8 +20,8 @@
                 "reveal": "silent",
                 "panel": "new",
                 "group": "develop"
-            },
-            "runOptions": { "runOn": "folderOpen" }
+            }
+            // "runOptions": { "runOn": "folderOpen" }
         },
         {
             "label": "Prisma Studio",
