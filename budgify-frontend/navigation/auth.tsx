@@ -10,7 +10,7 @@ interface Props {
 }
 
 const AuthProvider = ({ children }: Props) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   return (
     <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
