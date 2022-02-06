@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Button, StyleSheet, TextInput } from 'react-native';
+import { Button, Dimensions, StyleSheet, TextInput } from 'react-native';
 import { Text, View } from '../../components/Themed';
 import { AuthContext } from '../../navigation/auth';
 
@@ -88,6 +88,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   input: {
+    width: Dimensions.get('window').width - 50,
+    // TODO: Check for iPad width
+    maxWidth: 512,
     borderColor: 'white',
     borderRadius: 4,
     color: 'white',
