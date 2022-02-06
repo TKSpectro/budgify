@@ -18,14 +18,19 @@ const GET_ME = gql`
 export default function ProfileScreen() {
   const { setIsLoggedIn } = useContext(AuthContext);
 
-  const { data } = useQuery(GET_ME);
+  const { data, client } = useQuery(GET_ME);
   const me = data?.me;
+
+  const handleLogout = () => {
+    client.clearStore();
+    setIsLoggedIn(false);
+  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Profile</Text>
       <Text style={styles.title}>{JSON.stringify(me, null, 2)}</Text>
-      <Button title='Logout' onPress={() => setIsLoggedIn(false)} />
+      <Button title='Logout' onPress={handleLogout} />
     </View>
   );
 }
