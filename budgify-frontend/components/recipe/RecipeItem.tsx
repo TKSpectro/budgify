@@ -1,6 +1,6 @@
 import { gql, useMutation } from '@apollo/client';
 import React from 'react';
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { Dimensions, Pressable, StyleSheet, Text } from 'react-native';
 import { View } from '../Themed';
 
 const REMOVE_RECIPE = gql`
@@ -36,9 +36,7 @@ export const RecipeItem = ({ recipe }: Props) => {
   return (
     <View style={styles.item}>
       <Text style={styles.title}>{recipe.title}</Text>
-      <Text style={styles.date}>
-        {new Date(recipe.createdAt).toLocaleString()}
-      </Text>
+
       <Pressable style={styles.button} onPress={() => removeRecipe()}>
         <Text style={styles.buttonText}>X</Text>
       </Pressable>
@@ -53,8 +51,10 @@ export const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 10,
     padding: 20,
+    width: Dimensions.get('window').width - 40,
     marginVertical: 8,
     marginHorizontal: 16,
+    justifyContent: 'space-between',
   },
   title: {
     color: '#2dd4bf',
