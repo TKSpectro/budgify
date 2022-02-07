@@ -33,6 +33,7 @@ type Query {
 type Mutation {
   addRecipe(newRecipeData: NewRecipeInput!): Recipe!
   removeRecipe(id: String!): Boolean!
+  signin(password: String!, email: String!): String!
 }
 
 input NewRecipeInput {

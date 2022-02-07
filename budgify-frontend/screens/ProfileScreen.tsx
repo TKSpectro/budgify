@@ -1,4 +1,5 @@
 import { gql, useQuery } from '@apollo/client';
+import * as SecureStore from 'expo-secure-store';
 import React, { useContext } from 'react';
 import { Button, StyleSheet } from 'react-native';
 import { Text, View } from '../components/Themed';
@@ -22,6 +23,7 @@ export default function ProfileScreen() {
   const me = data?.me;
 
   const handleLogout = () => {
+    SecureStore.deleteItemAsync('token');
     client.clearStore();
     setIsLoggedIn(false);
   };

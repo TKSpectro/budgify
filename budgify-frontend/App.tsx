@@ -13,6 +13,10 @@ const client = new ApolloClient({
   uri: Constants.manifest?.extra?.apiUrl,
   // 'http://localhost:3000/' + 'graphql/'
   cache: new InMemoryCache(),
+  // TODO: Load token from async storage
+  headers: {
+    authorization: '',
+  },
 });
 
 export default function App() {

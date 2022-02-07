@@ -11,7 +11,7 @@ import { UserModule } from './user/user.module';
     GraphQLModule.forRoot({
       installSubscriptionHandlers: true,
       autoSchemaFile: 'schema.gql',
-
+      context: ({ req }) => ({ req }),
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
