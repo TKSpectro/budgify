@@ -2,6 +2,13 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "SplitTerminalOnStartup",
+            "command": "${command:workbench.action.terminal.split}",
+            "type": "shell",
+            "problemMatcher": [],
+            "runOptions": { "runOn": "folderOpen" }
+        },
+        {
             "label": "Backend",
             "type": "shell",
             "command": "cd budgify-frontend && npm start",
