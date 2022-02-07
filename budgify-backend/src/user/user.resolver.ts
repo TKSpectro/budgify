@@ -1,6 +1,7 @@
 import { Inject } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
+import { ApolloError } from 'apollo-server-express';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { User } from './models/user.model';
 
@@ -16,7 +17,7 @@ export class UserResolver {
     const token = context?.req?.headers?.authorization || '';
 
     if (!token) {
-      throw new Error('No token provided');
+      throw new ApolloError('No token provided');
     }
 
     const decoded = this.jwtService.verify(token);
@@ -31,8 +32,7 @@ export class UserResolver {
   ): Promise<string> {
     const user = await this.prisma.user.findFirst({ where: { email: email } });
     if (!user) {
-      // TODO: Throw error
-      return '';
+      throw new ApolloError('User not found');
     }
 
     // TODO: Check if data is actually correct

@@ -42,11 +42,11 @@ export default function Navigation({
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootNavigator() {
-  const { isLoggedIn } = useContext(AuthContext);
+  const { isLoggedIn, isLoading } = useContext(AuthContext);
 
   return (
     <Stack.Navigator>
-      {isLoggedIn ? (
+      {!isLoading && isLoggedIn ? (
         <Stack.Screen
           name='Root'
           component={BottomTabNavigator}

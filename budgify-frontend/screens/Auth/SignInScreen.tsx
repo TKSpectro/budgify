@@ -1,16 +1,8 @@
-import { gql, useMutation } from '@apollo/client';
-import * as SecureStore from 'expo-secure-store';
 import { useContext } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Button, Dimensions, StyleSheet, TextInput } from 'react-native';
 import { Text, View } from '../../components/Themed';
 import { AuthContext } from '../../navigation/auth';
-
-const SIGNIN = gql`
-  mutation SIGNIN($email: String!, $password: String!) {
-    signin(email: $email, password: $password)
-  }
-`;
 
 interface Props {
   navigation: any;
@@ -22,25 +14,16 @@ type FormDate = {
 };
 
 export default function SignInScreen({ navigation }: Props) {
-  const { setIsLoggedIn } = useContext(AuthContext);
+  const { signIn } = useContext(AuthContext);
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<FormDate>({ defaultValues: { email: '', password: '' } });
 
-  const [signIn, { data }] = useMutation(SIGNIN, {
-    onError: (error) => console.log('addRecipe error', error),
-  });
-
   const onSubmit = (data: FormDate) => {
-    signIn({ variables: data });
+    signIn({ ...data });
   };
-
-  if (data?.signin?.length > 0) {
-    SecureStore.setItemAsync('token', data.signin);
-    setIsLoggedIn(true);
-  }
 
   return (
     <View style={styles.container}>

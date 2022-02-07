@@ -17,7 +17,7 @@ const GET_ME = gql`
 `;
 
 export default function ProfileScreen() {
-  const { setIsLoggedIn } = useContext(AuthContext);
+  const { signOut } = useContext(AuthContext);
 
   const { data, client } = useQuery(GET_ME);
   const me = data?.me;
@@ -25,7 +25,7 @@ export default function ProfileScreen() {
   const handleLogout = () => {
     SecureStore.deleteItemAsync('token');
     client.clearStore();
-    setIsLoggedIn(false);
+    signOut();
   };
 
   return (

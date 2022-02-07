@@ -1,5 +1,12 @@
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import {
+  ApolloClient,
+  ApolloProvider,
+  createHttpLink,
+  InMemoryCache,
+} from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import Constants from 'expo-constants';
+import * as SecureStore from 'expo-secure-store';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -8,15 +15,22 @@ import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 import AuthProvider from './navigation/auth';
 
+const httpLink = createHttpLink({ uri: Constants.manifest?.extra?.apiUrl });
+const authLink = setContext(async (_, { headers }) => {
+  const token = await SecureStore.getItemAsync('token');
+
+  return {
+    headers: {
+      ...headers,
+      authorization: token || null,
+    },
+  };
+});
+
 // Initialize Apollo Client
 const client = new ApolloClient({
-  uri: Constants.manifest?.extra?.apiUrl,
-  // 'http://localhost:3000/' + 'graphql/'
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
-  // TODO: Load token from async storage
-  headers: {
-    authorization: '',
-  },
 });
 
 export default function App() {
