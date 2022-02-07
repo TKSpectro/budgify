@@ -8,6 +8,12 @@ const SIGNIN = gql`
   }
 `;
 
+const SIGNUP = gql`
+  mutation SIGNUP($name: String!, $email: String!, $password: String!) {
+    signup(name: $name, email: $email, password: $password)
+  }
+`;
+
 interface IAuthContext {
   isLoading: boolean;
   isLoggedIn: boolean;
@@ -69,6 +75,14 @@ const AuthProvider = ({ children }: Props) => {
     },
   });
 
+  const [signUpMutation] = useMutation(SIGNUP, {
+    onError: (error) => console.info('AUTH | SIGNUP ERROR |', error),
+    onCompleted: async (data) => {
+      console.info('AUTH | SIGNUP');
+      dispatch({ type: 'SIGN_IN', token: data?.signup });
+    },
+  });
+
   useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async () => {
@@ -80,10 +94,6 @@ const AuthProvider = ({ children }: Props) => {
         // Restoring token failed
       }
 
-      // After restoring token, we may need to validate it in production apps
-
-      // This will switch to the App screen or Auth screen and this loading
-      // screen will be unmounted and thrown away.
       dispatch({ type: 'RESTORE_TOKEN', token: userToken });
     };
 
@@ -102,8 +112,7 @@ const AuthProvider = ({ children }: Props) => {
         dispatch({ type: 'SIGN_OUT' });
       },
       signUp: async (data: any) => {
-        // TODO: Same as signIn
-        dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
+        signUpMutation({ variables: data });
       },
     }),
     [state.isLoading, state.token],

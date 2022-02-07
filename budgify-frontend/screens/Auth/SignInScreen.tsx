@@ -40,6 +40,7 @@ export default function SignInScreen({ navigation }: Props) {
             onChangeText={onChange}
             value={value}
             placeholder='Email'
+            autoCompleteType='email'
           />
         )}
       />
@@ -51,11 +52,13 @@ export default function SignInScreen({ navigation }: Props) {
         rules={{ required: true }}
         render={({ field: { onChange, onBlur, value } }) => (
           <TextInput
+            secureTextEntry={true}
             style={styles.input}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
             placeholder='Password'
+            autoCompleteType='password'
           />
         )}
       />
