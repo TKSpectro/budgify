@@ -11,7 +11,7 @@
         {
             "label": "Backend",
             "type": "shell",
-            "command": "cd budgify-frontend && npm start",
+            "command": "cd frontend && npm start",
             "presentation": {
                 "reveal": "always",
                 "panel": "new",
@@ -22,7 +22,7 @@
         {
             "label": "Frontend",
             "type": "shell",
-            "command": "cd budgify-backend && npm run start:dev",
+            "command": "cd backend && npm run start:dev",
             "presentation": {
                 "reveal": "silent",
                 "panel": "new",
@@ -33,7 +33,7 @@
         {
             "label": "Prisma Studio",
             "type": "shell",
-            "command": "cd budgify-backend && npx prisma studio --browser none",
+            "command": "cd backend && npx prisma studio --browser none",
             "presentation": {
                 "reveal": "never",
                 "panel": "dedicated",

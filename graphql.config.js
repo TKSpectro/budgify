@@ -1,3 +1,3 @@
 module.exports = {
-    schema: './budgify-backend/schema.gql',
+    schema: './backend/schema.gql',
 };
