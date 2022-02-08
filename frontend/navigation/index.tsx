@@ -18,11 +18,7 @@ import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import TabOneScreen from '../screens/TabOneScreen';
-import {
-  RootStackParamList,
-  RootTabParamList,
-  RootTabScreenProps,
-} from '../types';
+import { RootStackParamList, RootTabParamList } from '../types';
 import { AuthContext } from './auth';
 
 export default function Navigation({
@@ -79,10 +75,10 @@ function BottomTabNavigator() {
       <BottomTab.Screen
         name='TabOne'
         component={TabOneScreen}
-        options={({ navigation }: RootTabScreenProps<'TabOne'>) => ({
+        options={{
           title: 'Tab One',
           tabBarIcon: ({ color }) => <TabBarIcon name='book' color={color} />,
-        })}
+        }}
       />
       <BottomTab.Screen
         name='Profile'
@@ -90,7 +86,7 @@ function BottomTabNavigator() {
         options={{
           title: 'Profile',
           // TODO: Maybe use the user avatar here?
-          tabBarIcon: ({ color }) => <TabBarIcon name='circle' color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name='user-o' color={color} />,
         }}
       />
     </BottomTab.Navigator>

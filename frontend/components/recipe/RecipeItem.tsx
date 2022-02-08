@@ -50,7 +50,7 @@ export const styles = StyleSheet.create({
     borderColor: '#9ca3af',
     borderWidth: 2,
     borderRadius: 10,
-    padding: 20,
+    padding: 10,
     width: Dimensions.get('window').width - 40,
     marginVertical: 8,
     marginHorizontal: 16,
