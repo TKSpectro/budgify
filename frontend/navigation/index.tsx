@@ -8,7 +8,7 @@ import {
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
 import { useContext } from 'react';
-import { ColorSchemeName, Pressable } from 'react-native';
+import { ColorSchemeName } from 'react-native';
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import ResetPasswordScreen from '../screens/Auth/ResetPasswordScreen';
@@ -45,38 +45,18 @@ function RootNavigator() {
   const { isLoggedIn, isLoading } = useContext(AuthContext);
 
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       {!isLoading && isLoggedIn ? (
-        <Stack.Screen
-          name='Root'
-          component={BottomTabNavigator}
-          options={{ headerShown: false }}
-        />
+        <Stack.Screen name='Root' component={BottomTabNavigator} />
       ) : (
         <>
-          <Stack.Screen
-            name='SignIn'
-            component={SignInScreen}
-            options={{ title: 'SignIn', headerShown: false }}
-          />
-          <Stack.Screen
-            name='SignUp'
-            component={SignUpScreen}
-            options={{ title: 'SignUp!', headerShown: false }}
-          />
-          <Stack.Screen
-            name='ResetPassword'
-            component={ResetPasswordScreen}
-            options={{ title: 'ResetPassword!', headerShown: false }}
-          />
+          <Stack.Screen name='SignIn' component={SignInScreen} />
+          <Stack.Screen name='SignUp' component={SignUpScreen} />
+          <Stack.Screen name='ResetPassword' component={ResetPasswordScreen} />
         </>
       )}
 
-      <Stack.Screen
-        name='NotFound'
-        component={NotFoundScreen}
-        options={{ title: 'Oops!' }}
-      />
+      <Stack.Screen name='NotFound' component={NotFoundScreen} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name='Modal' component={ModalScreen} />
       </Stack.Group>
@@ -93,6 +73,7 @@ function BottomTabNavigator() {
       initialRouteName='Profile'
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
+        headerShown: false,
       }}
     >
       <BottomTab.Screen
@@ -100,22 +81,7 @@ function BottomTabNavigator() {
         component={TabOneScreen}
         options={({ navigation }: RootTabScreenProps<'TabOne'>) => ({
           title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name='code' color={color} />,
-          headerRight: () => (
-            <Pressable
-              onPress={() => navigation.navigate('Modal')}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}
-            >
-              <FontAwesome
-                name='info-circle'
-                size={25}
-                color={Colors[colorScheme].text}
-                style={{ marginRight: 15 }}
-              />
-            </Pressable>
-          ),
+          tabBarIcon: ({ color }) => <TabBarIcon name='book' color={color} />,
         })}
       />
       <BottomTab.Screen
