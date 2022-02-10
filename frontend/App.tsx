@@ -2,9 +2,11 @@ import {
   ApolloClient,
   ApolloProvider,
   createHttpLink,
+  from,
   InMemoryCache,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
+import { onError } from '@apollo/client/link/error';
 import Constants from 'expo-constants';
 import * as SecureStore from 'expo-secure-store';
 import { StatusBar } from 'expo-status-bar';
@@ -26,10 +28,27 @@ const authLink = setContext(async (_, { headers }) => {
     },
   };
 });
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors)
+    graphQLErrors.forEach(({ message, extensions, locations, path }) => {
+      console.log(
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+      );
+
+      if (extensions.code == '401' && message.includes('invalid token')) {
+        console.log('[GraphQL error]: Unauthorized');
+        SecureStore.deleteItemAsync('token');
+
+        // TODO: Somehow need to redirect user back to login screen
+      }
+    });
+
+  if (networkError) console.log(`[Network error]: ${networkError}`);
+});
 
 // Initialize Apollo Client
 const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+  link: from([authLink, errorLink, httpLink]),
   cache: new InMemoryCache(),
 });
 
