@@ -1,27 +1,16 @@
-import { Inject } from '@nestjs/common';
+import { Inject, UseGuards } from '@nestjs/common';
 import { Context, Query, Resolver } from '@nestjs/graphql';
-import { JwtService } from '@nestjs/jwt';
-import { ApolloError } from 'apollo-server-express';
+import { AuthGuard } from 'src/guards/auth.guard';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { User } from './models/user.model';
 
 @Resolver((of) => User)
 export class UserResolver {
-  constructor(
-    @Inject(PrismaService) private prisma: PrismaService,
-    private jwtService: JwtService,
-  ) {}
+  constructor(@Inject(PrismaService) private prisma: PrismaService) {}
 
   @Query((returns) => User)
+  @UseGuards(new AuthGuard())
   async me(@Context() context): Promise<User> {
-    const token = context?.req?.headers?.authorization || '';
-
-    if (!token) {
-      throw new ApolloError('No token provided');
-    }
-
-    const decoded = this.jwtService.verify(token);
-
-    return this.prisma.user.findFirst({ where: { id: decoded.id } });
+    return this.prisma.user.findFirst({ where: { id: context.user.id } });
   }
 }

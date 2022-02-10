@@ -1,17 +1,14 @@
 import { Inject } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { JwtService } from '@nestjs/jwt';
 import { ApolloError } from 'apollo-server-express';
 import { compareSync, hashSync } from 'bcrypt';
+import * as jwt from 'jsonwebtoken';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { User } from '../user/models/user.model';
 
 @Resolver((of) => User)
 export class AuthResolver {
-  constructor(
-    @Inject(PrismaService) private prisma: PrismaService,
-    private jwtService: JwtService,
-  ) {}
+  constructor(@Inject(PrismaService) private prisma: PrismaService) {}
 
   @Mutation((returns) => String)
   async signin(
@@ -24,7 +21,7 @@ export class AuthResolver {
       throw new ApolloError('Invalid credentials');
     }
 
-    return this.jwtService.sign({ id: user.id });
+    return 'Bearer ' + jwt.sign({ id: user.id }, process.env.JWT_SECRET);
   }
 
   @Mutation((returns) => String)
@@ -46,7 +43,6 @@ export class AuthResolver {
       }
       throw new ApolloError('Something went wrong');
     }
-
-    return this.jwtService.sign({ id: user.id });
+    return 'Bearer ' + jwt.sign({ id: user.id }, process.env.JWT_SECRET);
   }
 }
