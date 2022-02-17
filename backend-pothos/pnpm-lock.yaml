@@ -9,10 +9,12 @@ specifiers:
   '@prisma/client': ^3.9.2
   '@types/bcrypt': ^5.0.0
   '@types/node': ^17.0.18
-  apollo-server: ^3.6.3
+  apollo-server-core: ^3.6.3
+  apollo-server-express: ^3.6.3
   bcrypt: ^5.0.1
   concurrently: ^7.0.0
   date-fns: ^2.28.0
+  express: ^4.17.3
   graphql: ^16.3.0
   iron-session: ^6.0.5
   prisma: ^3.9.2
@@ -29,11 +31,13 @@ dependencies:
   '@pothos/plugin-scope-auth': 3.3.0_graphql@16.3.0
   '@pothos/plugin-validation': 3.0.1_graphql@16.3.0+zod@3.11.6
   '@prisma/client': 3.9.2_prisma@3.9.2
-  apollo-server: 3.6.3_graphql@16.3.0
+  apollo-server-core: 3.6.3_graphql@16.3.0
+  apollo-server-express: 3.6.3_express@4.17.3+graphql@16.3.0
   bcrypt: 5.0.1
   date-fns: 2.28.0
+  express: 4.17.3
   graphql: 16.3.0
-  iron-session: 6.0.5
+  iron-session: 6.0.5_express@4.17.3
   zod: 3.11.6
 
 devDependencies:
@@ -571,7 +575,7 @@ packages:
       graphql: 16.3.0
     dev: false
 
-  /apollo-server-express/3.6.3_express@4.17.2+graphql@16.3.0:
+  /apollo-server-express/3.6.3_express@4.17.3+graphql@16.3.0:
     resolution: {integrity: sha512-3CjahZ+n+1T7pHH1qW1B6Ns0BzwOMeupAp2u0+M8ruOmE/e7VKn0OSOQQckZ8Z2AcWxWeno9K89fIv3PoSYgYA==}
     engines: {node: '>=12.0'}
     peerDependencies:
@@ -588,7 +592,7 @@ packages:
       apollo-server-types: 3.5.1_graphql@16.3.0
       body-parser: 1.19.2
       cors: 2.8.5
-      express: 4.17.2
+      express: 4.17.3
       graphql: 16.3.0
       parseurl: 1.3.3
     transitivePeerDependencies:
@@ -616,19 +620,6 @@ packages:
       apollo-reporting-protobuf: 3.3.0
       apollo-server-caching: 3.3.0
       apollo-server-env: 4.2.1
-      graphql: 16.3.0
-    transitivePeerDependencies:
-      - encoding
-    dev: false
-
-  /apollo-server/3.6.3_graphql@16.3.0:
-    resolution: {integrity: sha512-kNvOiDNkIaO+MsfR9v40Vz4ArlDdc9VwVKGJy5dniLW9AoDa/tSF99m8ItfGoMypqlRPMgrNGxkMuToBnvYXNQ==}
-    peerDependencies:
-      graphql: ^15.3.0 || ^16.0.0
-    dependencies:
-      apollo-server-core: 3.6.3_graphql@16.3.0
-      apollo-server-express: 3.6.3_express@4.17.2+graphql@16.3.0
-      express: 4.17.2
       graphql: 16.3.0
     transitivePeerDependencies:
       - encoding
@@ -680,22 +671,6 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /body-parser/1.19.1:
-    resolution: {integrity: sha512-8ljfQi5eBk8EJfECMrgqNGWPEY5jWP+1IzkzkGdFFEwFQZZyaZ21UqdaHktgiMlH0xLHqIFtE/u2OYE5dOtViA==}
-    engines: {node: '>= 0.8'}
-    dependencies:
-      bytes: 3.1.1
-      content-type: 1.0.4
-      debug: 2.6.9
-      depd: 1.1.2
-      http-errors: 1.8.1
-      iconv-lite: 0.4.24
-      on-finished: 2.3.0
-      qs: 6.9.6
-      raw-body: 2.4.2
-      type-is: 1.6.18
-    dev: false
-
   /body-parser/1.19.2:
     resolution: {integrity: sha512-SAAwOxgoCKMGs9uUAUFHygfLAyaniaoun6I8mFY9pRAJL9+Kec34aU+oIjDhTycub1jozEfEwx1W1IuOYxVSFw==}
     engines: {node: '>= 0.8'}
@@ -728,11 +703,6 @@ packages:
   /buffer-from/1.1.2:
     resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==}
     dev: true
-
-  /bytes/3.1.1:
-    resolution: {integrity: sha512-dWe4nWO/ruEOY7HkUJ5gFt1DCFV9zPRoJr8pV0/ASQermOZjtq8jMjOprC0Kd10GLN+l7xaUPvxzJFWtxGu8Fg==}
-    engines: {node: '>= 0.8'}
-    dev: false
 
   /bytes/3.1.2:
     resolution: {integrity: sha512-/Nf7TyzTx6S3yRJObOAV7956r8cr2+Oj8AC5dt8wSP3BQAoeX58NoHyCU8P8zGkNXStjTSi6fzO6F0pBdcYbEg==}
@@ -832,6 +802,11 @@ packages:
 
   /cookie/0.4.1:
     resolution: {integrity: sha512-ZwrFkGJxUR3EIoXtO+yVE69Eb7KlixbaeAWfBQB9vVsNn/o+Yw69gBWSSDK825hQNdN+wF8zELf3dFNl/kxkUA==}
+    engines: {node: '>= 0.6'}
+    dev: false
+
+  /cookie/0.4.2:
+    resolution: {integrity: sha512-aSWTXFzaKWkvHO1Ny/s+ePFpvKsPnjc551iI41v3ny/ow6tBG5Vd+FuqGNhh1LxOmVzOlGUriIlOaokOvhaStA==}
     engines: {node: '>= 0.6'}
     dev: false
 
@@ -938,16 +913,16 @@ packages:
     engines: {node: '>= 0.6'}
     dev: false
 
-  /express/4.17.2:
-    resolution: {integrity: sha512-oxlxJxcQlYwqPWKVJJtvQiwHgosH/LrLSPA+H4UxpyvSS6jC5aH+5MoHFM+KABgTOt0APue4w66Ha8jCUo9QGg==}
+  /express/4.17.3:
+    resolution: {integrity: sha512-yuSQpz5I+Ch7gFrPCk4/c+dIBKlQUxtgwqzph132bsT6qhuzss6I8cLJQz7B3rFblzd6wtcI0ZbGltH/C4LjUg==}
     engines: {node: '>= 0.10.0'}
     dependencies:
       accepts: 1.3.8
       array-flatten: 1.1.1
-      body-parser: 1.19.1
+      body-parser: 1.19.2
       content-disposition: 0.5.4
       content-type: 1.0.4
-      cookie: 0.4.1
+      cookie: 0.4.2
       cookie-signature: 1.0.6
       debug: 2.6.9
       depd: 1.1.2
@@ -962,7 +937,7 @@ packages:
       parseurl: 1.3.3
       path-to-regexp: 0.1.7
       proxy-addr: 2.0.7
-      qs: 6.9.6
+      qs: 6.9.7
       range-parser: 1.2.1
       safe-buffer: 5.2.1
       send: 0.17.2
@@ -1139,7 +1114,7 @@ packages:
     engines: {node: '>= 0.10'}
     dev: false
 
-  /iron-session/6.0.5:
+  /iron-session/6.0.5_express@4.17.3:
     resolution: {integrity: sha512-sxkymaQzPkgUnDRfxxstm4jKCKx+ElrdPKzk+uJWj98zk9EPBPHPMg4jJgd+p0ucj631bbrRL9Bjc+XTwxUzeg==}
     engines: {node: '>=12'}
     peerDependencies:
@@ -1156,6 +1131,7 @@ packages:
       '@types/express': 4.17.13
       '@types/node': 16.11.25
       cookie: 0.4.1
+      express: 4.17.3
     dev: false
 
   /is-binary-path/2.1.0:
@@ -1415,11 +1391,6 @@ packages:
       ipaddr.js: 1.9.1
     dev: false
 
-  /qs/6.9.6:
-    resolution: {integrity: sha512-TIRk4aqYLNoJUbd+g2lEdz5kLWIuTMRagAXxl78Q0RiVjAOugHmeKNGdd3cwo/ktpf9aL9epCfFqWDEKysUlLQ==}
-    engines: {node: '>=0.6'}
-    dev: false
-
   /qs/6.9.7:
     resolution: {integrity: sha512-IhMFgUmuNpyRfxA90umL7ByLlgRXu6tIfKPpF5TmcfRLlLCckfP/g3IQmju6jjpu+Hh8rA+2p6A27ZSPOOHdKw==}
     engines: {node: '>=0.6'}
@@ -1428,16 +1399,6 @@ packages:
   /range-parser/1.2.1:
     resolution: {integrity: sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==}
     engines: {node: '>= 0.6'}
-    dev: false
-
-  /raw-body/2.4.2:
-    resolution: {integrity: sha512-RPMAFUJP19WIet/99ngh6Iv8fzAbqum4Li7AD6DtGaW2RpMB/11xDoalPiJMTbu6I3hkbMVkATvZrqb9EEqeeQ==}
-    engines: {node: '>= 0.8'}
-    dependencies:
-      bytes: 3.1.1
-      http-errors: 1.8.1
-      iconv-lite: 0.4.24
-      unpipe: 1.0.0
     dev: false
 
   /raw-body/2.4.3:

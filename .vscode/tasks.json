@@ -1,46 +1,46 @@
-{
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "SplitTerminalOnStartup",
-            "command": "${command:workbench.action.terminal.split}",
-            "type": "shell",
-            "problemMatcher": [],
-            "runOptions": { "runOn": "folderOpen" }
-        },
-        {
-            "label": "Backend",
-            "type": "shell",
-            "command": "cd frontend && npm start",
-            "presentation": {
-                "reveal": "always",
-                "panel": "new",
-                "group": "develop"
-            }
-            // "runOptions": { "runOn": "folderOpen" }
-        },
-        {
-            "label": "Frontend",
-            "type": "shell",
-            "command": "cd backend && npm run start:dev",
-            "presentation": {
-                "reveal": "silent",
-                "panel": "new",
-                "group": "develop"
-            }
-            // "runOptions": { "runOn": "folderOpen" }
-        },
-        {
-            "label": "Prisma Studio",
-            "type": "shell",
-            "command": "cd backend && npx prisma studio --browser none",
-            "presentation": {
-                "reveal": "never",
-                "panel": "dedicated",
-                "group": "background"
-            },
+// {
+//     "version": "2.0.0",
+//     "tasks": [
+//         {
+//             "label": "SplitTerminalOnStartup",
+//             "command": "${command:workbench.action.terminal.split}",
+//             "type": "shell",
+//             "problemMatcher": [],
+//             "runOptions": { "runOn": "folderOpen" }
+//         },
+//         {
+//             "label": "Backend",
+//             "type": "shell",
+//             "command": "cd frontend && npm start",
+//             "presentation": {
+//                 "reveal": "always",
+//                 "panel": "new",
+//                 "group": "develop"
+//             }
+//             // "runOptions": { "runOn": "folderOpen" }
+//         },
+//         {
+//             "label": "Frontend",
+//             "type": "shell",
+//             "command": "cd backend && npm run start:dev",
+//             "presentation": {
+//                 "reveal": "silent",
+//                 "panel": "new",
+//                 "group": "develop"
+//             }
+//             // "runOptions": { "runOn": "folderOpen" }
+//         },
+//         {
+//             "label": "Prisma Studio",
+//             "type": "shell",
+//             "command": "cd backend && npx prisma studio --browser none",
+//             "presentation": {
+//                 "reveal": "never",
+//                 "panel": "dedicated",
+//                 "group": "background"
+//             },
 
-            "runOptions": { "runOn": "folderOpen" }
-        }
-    ]
-}
+//             "runOptions": { "runOn": "folderOpen" }
+//         }
+//     ]
+// }

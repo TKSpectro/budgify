@@ -1,4 +1,7 @@
-import { ApolloServer } from 'apollo-server';
+import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
+import { ApolloServer } from 'apollo-server-express';
+import express from 'express';
+import { createServer } from 'http';
 import { builder } from './builder';
 import './resolvers';
 import { resolveSession } from './utils/sessions';
@@ -7,19 +10,28 @@ const PORT = 3000;
 
 export const schema = builder.toSchema({});
 
-export const server = new ApolloServer({
-  schema,
-  context: async ({ req, res }) => {
-    const { session, ironSession } = await resolveSession(req, res);
+async function startApolloServer() {
+  // Required logic for integrating with Express
+  const app = express();
+  const httpServer = createServer(app);
 
-    return { req, res, ironSession, session };
-  },
-});
+  const server = new ApolloServer({
+    schema,
+    context: async ({ req, res }) => {
+      const { session, ironSession } = await resolveSession(req, res);
 
-void server.listen(PORT, (error: unknown) => {
-  if (error) {
-    throw error;
-  }
+      return { req, res, ironSession, session };
+    },
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+  });
 
-  console.log(`🚀 Server started at http://127.0.0.1:${PORT}`);
-});
+  await server.start();
+  server.applyMiddleware({ app, path: '/' });
+
+  await new Promise<void>((resolve) =>
+    httpServer.listen({ port: 3000 }, resolve),
+  );
+  console.log(`🚀 Server ready at http://localhost:3000${server.graphqlPath}`);
+}
+
+startApolloServer();

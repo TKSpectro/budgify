@@ -1,4 +1,4 @@
-import { ValidationError } from 'apollo-server';
+import { ValidationError } from 'apollo-server-express';
 import { compareSync, hashSync } from 'bcrypt';
 import { prisma } from './prisma';
 

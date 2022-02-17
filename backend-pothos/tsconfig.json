@@ -9,7 +9,8 @@
     "forceConsistentCasingInFileNames": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "esModuleInterop": true
     // "baseUrl": "."
   },
   "include": ["prisma/*.ts", "src/**/*"],
