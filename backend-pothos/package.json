@@ -19,6 +19,7 @@
     "@pothos/core": "^3.2.0",
     "@pothos/plugin-prisma": "^0.17.0",
     "@pothos/plugin-scope-auth": "^3.3.0",
+    "@pothos/plugin-smart-subscriptions": "^3.0.2",
     "@pothos/plugin-validation": "^3.0.1",
     "@prisma/client": "^3.9.2",
     "apollo-server-core": "^3.6.3",
@@ -27,11 +28,14 @@
     "date-fns": "^2.28.0",
     "express": "^4.17.3",
     "graphql": "^16.3.0",
-    "iron-session": "^6.0.5",
+    "graphql-subscriptions": "^2.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "subscriptions-transport-ws": "^0.11.0",
     "zod": "^3.11.6"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
+    "@types/jsonwebtoken": "^8.5.8",
     "@types/node": "^17.0.18",
     "concurrently": "^7.0.0",
     "prisma": "^3.9.2",

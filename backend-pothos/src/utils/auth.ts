@@ -1,5 +1,6 @@
 import { ValidationError } from 'apollo-server-express';
 import { compareSync, hashSync } from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import { prisma } from './prisma';
 
 /**
@@ -34,14 +35,22 @@ export async function authenticateUser(email: string, password: string) {
     },
   });
 
-  if (!user || !user.hashedPassword) {
-    throw new ValidationError('Email not found');
+  if (!user) {
+    throw new ValidationError('Email or password wrong!');
   }
 
-  // If the password is invalid, reject the authenticate request:
   if (!(await verifyPassword(user.hashedPassword, password))) {
-    throw new ValidationError('Invalid password.');
+    throw new ValidationError('Email or password wrong!');
   }
 
   return user;
+}
+
+/**
+ * Creates a JWT with the given data
+ */
+export async function createJWT(data: Object) {
+  const signedJWT = jwt.sign(data, process.env.JWT_SECRET!);
+
+  return 'Bearer ' + signedJWT;
 }

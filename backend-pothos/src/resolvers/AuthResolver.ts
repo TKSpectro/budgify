@@ -1,33 +1,22 @@
 import { builder } from '../builder';
-import { authenticateUser, hashPassword } from '../utils/auth';
+import { authenticateUser, createJWT, hashPassword } from '../utils/auth';
 import { prisma } from '../utils/prisma';
-import { createSession, removeSession } from '../utils/sessions';
 
 builder.queryField('me', (t) =>
   t.prismaField({
     type: 'User',
     nullable: true,
     skipTypeScopes: true,
-    resolve: (query, _root, _args, { session }) => {
-      if (!session?.userId) {
+    resolve: (query, _root, _args, { user }) => {
+      if (!user?.id) {
         return null;
       }
 
       return prisma.user.findUnique({
         ...query,
-        where: { id: session.userId },
+        where: { id: user.id },
         rejectOnNotFound: true,
       });
-    },
-  }),
-);
-
-builder.mutationField('logout', (t) =>
-  t.field({
-    type: 'String',
-    resolve: async (_root, _args, { ironSession, session }) => {
-      await removeSession(ironSession, session);
-      return 'SUCCESS';
     },
   }),
 );
@@ -40,8 +29,8 @@ const LoginInput = builder.inputType('LoginInput', {
 });
 
 builder.mutationField('login', (t) =>
-  t.prismaField({
-    type: 'User',
+  t.field({
+    type: 'String',
     skipTypeScopes: true,
     authScopes: {
       unauthenticated: true,
@@ -49,23 +38,23 @@ builder.mutationField('login', (t) =>
     args: {
       input: t.arg({ type: LoginInput }),
     },
-    resolve: async (_query, _root, { input }, { ironSession }) => {
-      const user = await authenticateUser(input.email, input.password);
+    resolve: async (root, { input }) => {
+      const authenticatedUser = await authenticateUser(
+        input.email,
+        input.password,
+      );
 
-      // implement email verification
+      // TODO: implement email verification
       const ENABLE_EMAIL_VERIFICATION = false;
       if (ENABLE_EMAIL_VERIFICATION) {
-        if (user.emailVerified) {
-          await createSession(ironSession, user);
+        if (!authenticatedUser.emailVerified) {
         } else {
           // We re-send the verification email for convenience:
           // await sendVerificationEmail(user);
         }
-      } else {
-        await createSession(ironSession, user);
       }
 
-      return user;
+      return createJWT({ id: authenticatedUser.id });
     },
   }),
 );
@@ -84,8 +73,8 @@ const SignUpInput = builder.inputType('SignUpInput', {
 });
 
 builder.mutationField('signUp', (t) =>
-  t.prismaField({
-    type: 'User',
+  t.field({
+    type: 'String',
     skipTypeScopes: true,
     authScopes: {
       unauthenticated: true,
@@ -93,24 +82,25 @@ builder.mutationField('signUp', (t) =>
     args: {
       input: t.arg({ type: SignUpInput }),
     },
-    resolve: async (query, _root, { input }, { ironSession }) => {
+    resolve: async (root, { input }) => {
       const user = await prisma.user.create({
-        ...query,
         data: {
           name: input.name,
           email: input.email,
           hashedPassword: await hashPassword(input.password),
         },
       });
-      // implement email verification
+      // TODO: implement email verification
       const ENABLE_EMAIL_VERIFICATION = false;
       if (ENABLE_EMAIL_VERIFICATION) {
-        // await sendVerificationEmail(user);
-      } else {
-        await createSession(ironSession, user);
+        if (!user.emailVerified) {
+        } else {
+          // We re-send the verification email for convenience:
+          // await sendVerificationEmail(user);
+        }
       }
 
-      return user;
+      return createJWT({ id: user.id });
     },
   }),
 );

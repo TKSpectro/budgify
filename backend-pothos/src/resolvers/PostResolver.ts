@@ -1,3 +1,4 @@
+import faker from '@faker-js/faker';
 import { builder } from '../builder';
 import { prisma } from '../utils/prisma';
 
@@ -64,3 +65,54 @@ builder.queryFields((t) => ({
       }),
   }),
 }));
+
+builder.mutationField('createPost', (t) =>
+  t.prismaField({
+    type: 'Post',
+    skipTypeScopes: true,
+    authScopes: {
+      unauthenticated: true,
+    },
+    args: {
+      // input: t.arg({ type: SignUpInput }),
+    },
+
+    resolve: async (query, _root, args, ctx) => {
+      const post = await prisma.post.create({
+        ...query,
+        data: {
+          id: faker.date.between('2020-01-01', '2020-12-31').getTime(),
+          title: 'test',
+          content: 'test',
+          authorId: '1',
+        },
+      });
+
+      ctx.pubsub.publish('postAdded', { post });
+
+      return post;
+    },
+  }),
+);
+
+// builder.subscriptionField('postAdded', (t) => {
+//   return t.prismaField({
+//     type: 'Post',
+//     subscribe: (_, __, ctx) => {
+//       // const subResolver = withFilter(
+//       //   () => {
+//       //     return ctx.pubsub.asyncIterator('postAdded');
+//       //   },
+//       //   () => {
+//       //     return true;
+//       //   },
+//       // );
+
+//       // return subResolver(_, __, ctx);
+//       return ctx.pubsub.asyncIterator('postAdded');
+//     },
+//     resolve: (payload, _root, _args, _ctx) => {
+//       return payload.post;
+//     },
+//   });
+// });

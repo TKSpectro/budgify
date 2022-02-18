@@ -1,6 +1,9 @@
 import SchemaBuilder from '@pothos/core';
 import PrismaPlugin from '@pothos/plugin-prisma';
 import ScopeAuthPlugin from '@pothos/plugin-scope-auth';
+import SmartSubscriptionPlugin, {
+  subscribeOptionsFromIterator,
+} from '@pothos/plugin-smart-subscriptions';
 import ValidationPlugin from '@pothos/plugin-validation';
 import type PrismaTypes from '../prisma/pothos-types';
 import { Context } from './types';
@@ -20,15 +23,25 @@ export const builder = new SchemaBuilder<{
   };
 }>({
   defaultInputFieldRequiredness: true,
-  plugins: [ScopeAuthPlugin, ValidationPlugin, PrismaPlugin],
+  plugins: [
+    ScopeAuthPlugin,
+    ValidationPlugin,
+    SmartSubscriptionPlugin,
+    PrismaPlugin,
+  ],
   prisma: {
     client: prisma,
   },
-  authScopes: ({ session }) => ({
+  authScopes: ({ user }) => ({
     public: true,
-    user: !!session,
-    unauthenticated: !session,
+    user: !!user,
+    unauthenticated: !user,
   }),
+  smartSubscriptions: {
+    ...subscribeOptionsFromIterator((name, { pubsub }) => {
+      return pubsub.asyncIterator(name);
+    }),
+  },
 });
 
 // Initializes the query and mutation to be defaulted to user authScope
@@ -43,6 +56,8 @@ builder.mutationType({
     user: true,
   },
 });
+
+// builder.subscriptionType({});
 
 // Custom DateTime scalar
 builder.scalarType('DateTime', {

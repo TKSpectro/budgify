@@ -1,28 +1,74 @@
-import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
 import { ApolloServer } from 'apollo-server-express';
 import express from 'express';
+import { execute, subscribe } from 'graphql';
+import { PubSub } from 'graphql-subscriptions';
 import { createServer } from 'http';
+import jwt from 'jsonwebtoken';
+import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { builder } from './builder';
 import './resolvers';
-import { resolveSession } from './utils/sessions';
-
-const PORT = 3000;
+import { prisma } from './utils/prisma';
 
 export const schema = builder.toSchema({});
+const pubsub = new PubSub();
+
+if (!process.env.JWT_SECRET) {
+  console.error('JWT_SECRET is not set');
+}
 
 async function startApolloServer() {
   // Required logic for integrating with Express
   const app = express();
   const httpServer = createServer(app);
 
+  const subscriptionServer = SubscriptionServer.create(
+    {
+      schema,
+      execute,
+      subscribe,
+    },
+    {
+      server: httpServer,
+      path: '/',
+    },
+  );
+
   const server = new ApolloServer({
     schema,
     context: async ({ req, res }) => {
-      const { session, ironSession } = await resolveSession(req, res);
+      let user = null;
 
-      return { req, res, ironSession, session };
+      try {
+        if (req.headers.authorization?.startsWith('Bearer ')) {
+          const token = req.headers.authorization?.split(' ')[1] || null;
+
+          if (token) {
+            const data = jwt.verify(token, process.env.JWT_SECRET!);
+
+            if (typeof data !== 'string') {
+              user = await prisma.user.findFirst({
+                where: {
+                  id: data.id,
+                },
+              });
+            }
+          }
+        }
+      } catch (error) {}
+
+      return { req, res, user, pubsub };
     },
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    plugins: [
+      {
+        async serverWillStart() {
+          return {
+            async drainServer() {
+              subscriptionServer.close();
+            },
+          };
+        },
+      },
+    ],
   });
 
   await server.start();

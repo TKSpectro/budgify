@@ -1,10 +1,10 @@
-import { Session } from '@prisma/client';
+import { User } from '@prisma/client';
+import { PubSub } from 'graphql-subscriptions';
 import { IncomingMessage, OutgoingMessage } from 'http';
-import { IronSession } from 'iron-session';
 
 export interface Context {
   req: IncomingMessage;
   res: OutgoingMessage;
-  ironSession: IronSession;
-  session?: Session | null;
+  user: User | null;
+  pubsub: PubSub;
 }
