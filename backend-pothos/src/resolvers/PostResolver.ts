@@ -1,5 +1,6 @@
 import faker from '@faker-js/faker';
 import { builder } from '../builder';
+import { pubsub } from '../server';
 import { prisma } from '../utils/prisma';
 
 builder.prismaObject('Post', {
@@ -71,7 +72,7 @@ builder.mutationField('createPost', (t) =>
     type: 'Post',
     skipTypeScopes: true,
     authScopes: {
-      unauthenticated: true,
+      user: true,
     },
     args: {
       // input: t.arg({ type: SignUpInput }),
@@ -88,31 +89,25 @@ builder.mutationField('createPost', (t) =>
         },
       });
 
-      ctx.pubsub.publish('postAdded', { post });
+      pubsub.publish('postAdded', { post });
 
       return post;
     },
   }),
 );
 
-// builder.subscriptionField('postAdded', (t) => {
-//   return t.prismaField({
-//     type: 'Post',
-//     subscribe: (_, __, ctx) => {
-//       // const subResolver = withFilter(
-//       //   () => {
-//       //     return ctx.pubsub.asyncIterator('postAdded');
-//       //   },
-//       //   () => {
-//       //     return true;
-//       //   },
-//       // );
-
-//       // return subResolver(_, __, ctx);
-//       return ctx.pubsub.asyncIterator('postAdded');
-//     },
-//     resolve: (payload, _root, _args, _ctx) => {
-//       return payload.post;
-//     },
-//   });
-// });
+builder.subscriptionField('postAdded', (t) => {
+  return t.prismaField({
+    type: 'Post',
+    subscribe: () => {
+      return {
+        [Symbol.asyncIterator]() {
+          return pubsub.asyncIterator('postAdded');
+        },
+      };
+    },
+    resolve: (_, payload: any) => {
+      return payload?.post;
+    },
+  });
+});

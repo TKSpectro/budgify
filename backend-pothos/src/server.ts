@@ -10,14 +10,13 @@ import './resolvers';
 import { prisma } from './utils/prisma';
 
 export const schema = builder.toSchema({});
-const pubsub = new PubSub();
+export const pubsub = new PubSub();
 
 if (!process.env.JWT_SECRET) {
   console.error('JWT_SECRET is not set');
 }
 
-async function startApolloServer() {
-  // Required logic for integrating with Express
+(async function () {
   const app = express();
   const httpServer = createServer(app);
 
@@ -56,7 +55,7 @@ async function startApolloServer() {
         }
       } catch (error) {}
 
-      return { req, res, user, pubsub };
+      return { req, res, user };
     },
     plugins: [
       {
@@ -74,10 +73,9 @@ async function startApolloServer() {
   await server.start();
   server.applyMiddleware({ app, path: '/' });
 
-  await new Promise<void>((resolve) =>
-    httpServer.listen({ port: 3000 }, resolve),
+  httpServer.listen({ port: 3000 }, () =>
+    console.log(
+      `🚀 Server ready at http://localhost:3000${server.graphqlPath}`,
+    ),
   );
-  console.log(`🚀 Server ready at http://localhost:3000${server.graphqlPath}`);
-}
-
-startApolloServer();
+})();

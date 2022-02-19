@@ -6,6 +6,7 @@ import SmartSubscriptionPlugin, {
 } from '@pothos/plugin-smart-subscriptions';
 import ValidationPlugin from '@pothos/plugin-validation';
 import type PrismaTypes from '../prisma/pothos-types';
+import { pubsub } from './server';
 import { Context } from './types';
 import { prisma } from './utils/prisma';
 
@@ -38,7 +39,7 @@ export const builder = new SchemaBuilder<{
     unauthenticated: !user,
   }),
   smartSubscriptions: {
-    ...subscribeOptionsFromIterator((name, { pubsub }) => {
+    ...subscribeOptionsFromIterator((name) => {
       return pubsub.asyncIterator(name);
     }),
   },
@@ -57,7 +58,12 @@ builder.mutationType({
   },
 });
 
-// builder.subscriptionType({});
+builder.subscriptionType({
+  // TODO: Figure out how to enable auth for subscriptions (withFilter)
+  // authScopes: {
+  //   user: true,
+  // },
+});
 
 // Custom DateTime scalar
 builder.scalarType('DateTime', {
