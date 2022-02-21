@@ -1,3 +1,3 @@
 module.exports = {
-    schema: './backend/schema.gql',
+    schema: './backend-pothos/schema.graphql',
 };

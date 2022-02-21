@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { builder } from './builder';
 import './resolvers';
+import { writeSchema } from './utils/generate-schema';
 import { prisma } from './utils/prisma';
 
 export const schema = builder.toSchema({});
@@ -14,6 +15,11 @@ export const pubsub = new PubSub();
 
 if (!process.env.JWT_SECRET) {
   console.error('JWT_SECRET is not set');
+}
+
+// Generate the gql schema file if not in production
+if (process.env.NODE_ENV !== 'production') {
+  writeSchema(schema);
 }
 
 (async function () {

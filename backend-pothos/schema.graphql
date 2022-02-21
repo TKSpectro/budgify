@@ -1,0 +1,56 @@
+type Comment {
+  author: User!
+  comment: String!
+  id: ID!
+  post: Post!
+}
+
+scalar DateTime
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  createPost: Post!
+  login(input: LoginInput!): String!
+  signUp(input: SignUpInput!): String!
+}
+
+type Post {
+  author: User!
+  comments: [Comment!]!
+  content: String!
+  id: ID!
+  title: String!
+}
+
+type Query {
+  me: User
+  post(id: ID!): Post
+  posts(skip: Int!, take: Int!): [Post!]!
+  user(id: ID!): User
+}
+
+input SignUpInput {
+  email: String!
+  name: String!
+  password: String!
+}
+
+type Subscription {
+  postAdded: Post!
+}
+
+type User {
+  comments: [Comment!]!
+  createdAt: DateTime!
+  email: String!
+  emailVerified: Boolean!
+  hashedPassword: String!
+  id: ID!
+  name: String!
+  posts: [Post!]!
+  updatedAt: DateTime!
+}
