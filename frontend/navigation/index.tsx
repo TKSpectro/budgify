@@ -11,8 +11,8 @@ import { useContext } from 'react';
 import { ColorSchemeName } from 'react-native';
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
+import LoginScreen from '../screens/Auth/LoginScreen';
 import ResetPasswordScreen from '../screens/Auth/ResetPasswordScreen';
-import SignInScreen from '../screens/Auth/SignInScreen';
 import SignUpScreen from '../screens/Auth/SignUpScreen';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
@@ -46,7 +46,7 @@ function RootNavigator() {
         <Stack.Screen name='Root' component={BottomTabNavigator} />
       ) : (
         <>
-          <Stack.Screen name='SignIn' component={SignInScreen} />
+          <Stack.Screen name='Login' component={LoginScreen} />
           <Stack.Screen name='SignUp' component={SignUpScreen} />
           <Stack.Screen name='ResetPassword' component={ResetPasswordScreen} />
         </>

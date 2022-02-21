@@ -87,7 +87,7 @@ export default function SignUpScreen({ navigation }: Props) {
       />
       {errors.password && <Text>This is required.</Text>}
 
-      <Button title='Sign in' onPress={handleSubmit(onSubmit)} />
+      <Button title='Sign up' onPress={handleSubmit(onSubmit)} />
 
       <Text style={styles.link} onPress={() => navigation.navigate('SignIn')}>
         <FontAwesome name='arrow-left' size={20} />

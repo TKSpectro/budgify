@@ -13,8 +13,8 @@ type FormDate = {
   password: string;
 };
 
-export default function SignInScreen({ navigation }: Props) {
-  const { signIn } = useContext(AuthContext);
+export default function LoginScreen({ navigation }: Props) {
+  const { login } = useContext(AuthContext);
   const {
     control,
     handleSubmit,
@@ -22,7 +22,7 @@ export default function SignInScreen({ navigation }: Props) {
   } = useForm<FormDate>({ defaultValues: { email: '', password: '' } });
 
   const onSubmit = (data: FormDate) => {
-    signIn({ ...data });
+    login({ ...data });
   };
 
   return (

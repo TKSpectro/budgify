@@ -2,22 +2,22 @@ import { gql, useMutation } from '@apollo/client';
 import * as SecureStore from 'expo-secure-store';
 import { createContext, useEffect, useMemo, useReducer } from 'react';
 
-const SIGNIN = gql`
+const LOGIN = gql`
   mutation LOGIN($input: LoginInput!) {
     login(input: $input)
   }
 `;
 
 const SIGNUP = gql`
-  mutation SIGNUP($name: String!, $email: String!, $password: String!) {
-    signup(name: $name, email: $email, password: $password)
+  mutation SIGNUP($input: SignUpInput!) {
+    signUp(input: $input)
   }
 `;
 
 interface IAuthContext {
   isLoading: boolean;
   isLoggedIn: boolean;
-  signIn: (data: any) => void;
+  login: (data: any) => void;
   signOut: () => void;
   signUp: (data: any) => void;
 }
@@ -25,7 +25,7 @@ interface IAuthContext {
 export const AuthContext = createContext<IAuthContext>({
   isLoading: true,
   isLoggedIn: false,
-  signIn: () => {},
+  login: () => {},
   signOut: () => {},
   signUp: () => {},
 });
@@ -44,7 +44,7 @@ const AuthProvider = ({ children }: Props) => {
             token: action.token,
             isLoading: false,
           };
-        case 'SIGN_IN':
+        case 'LOGIN':
           SecureStore.setItemAsync('token', action.token);
           return {
             ...prevState,
@@ -67,11 +67,11 @@ const AuthProvider = ({ children }: Props) => {
     },
   );
 
-  const [signInMutation] = useMutation(SIGNIN, {
-    onError: (error) => console.info('AUTH | SIGNIN ERROR |', error),
+  const [loginMutation] = useMutation(LOGIN, {
+    onError: (error) => console.info('AUTH | LOGIN ERROR |', error),
     onCompleted: async (data) => {
-      console.info('AUTH | SIGNIN', data);
-      dispatch({ type: 'SIGN_IN', token: data?.login });
+      console.info('AUTH | LOGIN');
+      dispatch({ type: 'LOGIN', token: data?.login });
     },
   });
 
@@ -79,7 +79,7 @@ const AuthProvider = ({ children }: Props) => {
     onError: (error) => console.info('AUTH | SIGNUP ERROR |', error),
     onCompleted: async (data) => {
       console.info('AUTH | SIGNUP');
-      dispatch({ type: 'SIGN_IN', token: data?.signup });
+      dispatch({ type: 'LOGIN', token: data?.signUp });
     },
   });
 
@@ -104,15 +104,15 @@ const AuthProvider = ({ children }: Props) => {
     () => ({
       isLoading: state.isLoading,
       isLoggedIn: !!state.token,
-      signIn: async (data: any) => {
-        signInMutation({ variables: { input: data } });
+      login: async (data: any) => {
+        loginMutation({ variables: { input: data } });
       },
       signOut: () => {
         console.info('AUTH | LOGOUT');
         dispatch({ type: 'SIGN_OUT' });
       },
       signUp: async (data: any) => {
-        signUpMutation({ variables: data });
+        signUpMutation({ variables: { input: data } });
       },
     }),
     [state.isLoading, state.token],

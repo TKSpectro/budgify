@@ -20,7 +20,7 @@ export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
   Modal: undefined;
   NotFound: undefined;
-  SignIn: undefined;
+  Login: undefined;
   SignUp: undefined;
   ResetPassword: undefined;
   Auth: undefined;
@@ -32,7 +32,7 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
 export type RootTabParamList = {
   TabOne: undefined;
   Profile: undefined;
-  SignIn: undefined;
+  Login: undefined;
   SignUp: undefined;
   ResetPassword: undefined;
 };
