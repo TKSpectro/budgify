@@ -3,8 +3,8 @@ import * as SecureStore from 'expo-secure-store';
 import { createContext, useEffect, useMemo, useReducer } from 'react';
 
 const SIGNIN = gql`
-  mutation SIGNIN($email: String!, $password: String!) {
-    signin(email: $email, password: $password)
+  mutation LOGIN($input: LoginInput!) {
+    login(input: $input)
   }
 `;
 
@@ -70,8 +70,8 @@ const AuthProvider = ({ children }: Props) => {
   const [signInMutation] = useMutation(SIGNIN, {
     onError: (error) => console.info('AUTH | SIGNIN ERROR |', error),
     onCompleted: async (data) => {
-      console.info('AUTH | SIGNIN');
-      dispatch({ type: 'SIGN_IN', token: data?.signin });
+      console.info('AUTH | SIGNIN', data);
+      dispatch({ type: 'SIGN_IN', token: data?.login });
     },
   });
 
@@ -105,7 +105,7 @@ const AuthProvider = ({ children }: Props) => {
       isLoading: state.isLoading,
       isLoggedIn: !!state.token,
       signIn: async (data: any) => {
-        signInMutation({ variables: data });
+        signInMutation({ variables: { input: data } });
       },
       signOut: () => {
         console.info('AUTH | LOGOUT');
