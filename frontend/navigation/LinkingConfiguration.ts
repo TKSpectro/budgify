@@ -14,24 +14,10 @@ const linking: LinkingOptions<RootStackParamList> = {
     screens: {
       Root: {
         screens: {
-          TabOne: {
+          HomeStack: {
             screens: {
-              TabOneScreen: 'one',
-            },
-          },
-          Login: {
-            screens: {
-              LoginScreen: 'login',
-            },
-          },
-          SignUp: {
-            screens: {
-              SignUpScreen: 'signup',
-            },
-          },
-          ResetPassword: {
-            screens: {
-              ResetPasswordScreen: 'resetpassword',
+              HomeScreen: 'home',
+              HouseholdScreen: 'household',
             },
           },
           Profile: {
@@ -39,6 +25,21 @@ const linking: LinkingOptions<RootStackParamList> = {
               ProfileScreen: 'profile',
             },
           },
+        },
+      },
+      Login: {
+        screens: {
+          LoginScreen: 'login',
+        },
+      },
+      SignUp: {
+        screens: {
+          SignUpScreen: 'signup',
+        },
+      },
+      ResetPassword: {
+        screens: {
+          ResetPasswordScreen: 'resetpassword',
         },
       },
       Modal: 'modal',

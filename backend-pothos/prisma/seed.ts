@@ -1,48 +1,49 @@
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-magic-numbers */
 import faker from '@faker-js/faker';
 import { PrismaClient } from '@prisma/client';
+import { hashSync } from 'bcrypt';
 
 const prisma = new PrismaClient();
 
 faker.seed(123);
 
-console.log('creating users and posts');
-
 async function main() {
-  for (let i = 1; i <= 100; i += 1) {
-    await prisma.user.create({
-      data: {
-        id: i.toString(),
-        name: faker.name.findName(),
-        email: faker.internet.email(),
-        hashedPassword: faker.internet.password(),
-        emailVerified: true,
-      },
-    });
-  }
+  const user = await prisma.user.create({
+    data: {
+      name: 'Tom Käppler',
+      email: 'tom@web.de',
+      hashedPassword: hashSync('123123123', 10),
+      emailVerified: true,
+    },
+  });
 
-  for (let i = 1; i <= 100; i += 1) {
-    await prisma.post.create({
-      data: {
-        id: i,
-        authorId: faker.datatype.number({ min: 1, max: 100 }).toString(),
-        title: faker.lorem.text(),
-        content: faker.lorem.paragraphs(2),
+  const household = await prisma.household.create({
+    data: {
+      name: 'My Household',
+      owner: { connect: { id: user.id } },
+      members: { connect: { id: user.id } },
+      payments: {
+        createMany: {
+          data: [
+            {
+              name: 'Electricity',
+              userId: user.id,
+              value: 50,
+            },
+            {
+              name: 'Gas',
+              userId: user.id,
+              value: 50,
+            },
+            {
+              name: 'Water',
+              userId: user.id,
+              value: 50,
+            },
+          ],
+        },
       },
-    });
-  }
-
-  for (let i = 1; i <= 100; i += 1) {
-    await prisma.comment.create({
-      data: {
-        id: i,
-        authorId: faker.datatype.number({ min: 1, max: 100 }).toString(),
-        postId: faker.datatype.number({ min: 1, max: 100 }),
-        comment: faker.lorem.text(),
-      },
-    });
-  }
+    },
+  });
 }
 
 void main()

@@ -23,18 +23,14 @@ export type RootStackParamList = {
   Login: undefined;
   SignUp: undefined;
   ResetPassword: undefined;
-  Auth: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
   NativeStackScreenProps<RootStackParamList, Screen>;
 
 export type RootTabParamList = {
-  TabOne: undefined;
+  HomeStack: undefined;
   Profile: undefined;
-  Login: undefined;
-  SignUp: undefined;
-  ResetPassword: undefined;
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
@@ -42,3 +38,11 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
     BottomTabScreenProps<RootTabParamList, Screen>,
     NativeStackScreenProps<RootStackParamList>
   >;
+
+export type HomeStackParamList = {
+  Home: undefined;
+  Household: { id: string };
+};
+
+export type HomeStackScreenProps<Screen extends keyof HomeStackParamList> =
+  NativeStackScreenProps<HomeStackParamList, Screen>;

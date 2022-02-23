@@ -1,3 +1,4 @@
 import './AuthResolver';
-import './PostResolver';
+import './HouseholdResolver';
+import './PaymentResolver';
 import './UserResolver';

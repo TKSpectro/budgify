@@ -1,11 +1,25 @@
-type Comment {
-  author: User!
-  comment: String!
-  id: ID!
-  post: Post!
+input CreateHousehold {
+  name: String!
+}
+
+input CreatePayment {
+  description: String
+  householdId: ID!
+  name: String!
+  value: Int!
 }
 
 scalar DateTime
+
+type Household {
+  createdAt: DateTime!
+  id: ID!
+  members: [User!]!
+  name: String!
+  owner: User!
+  payments: [Payment!]!
+  updatedAt: DateTime!
+}
 
 input LoginInput {
   email: String!
@@ -13,24 +27,28 @@ input LoginInput {
 }
 
 type Mutation {
-  createPost: Post!
+  createHousehold(input: CreateHousehold!): Household!
+  createPayment(input: CreatePayment!): Payment!
   login(input: LoginInput!): String!
   signUp(input: SignUpInput!): String!
 }
 
-type Post {
-  author: User!
-  comments: [Comment!]!
-  content: String!
+type Payment {
+  createdAt: DateTime!
+  description: String
+  household: Household!
   id: ID!
-  title: String!
+  name: String!
+  updatedAt: DateTime!
+  user: User!
+  value: Float!
 }
 
 type Query {
+  household(id: ID!): Household
+  households: [Household!]
   me: User
-  post(id: ID!): Post
-  posts(skip: Int!, take: Int!): [Post!]!
-  user(id: ID!): User
+  payment(id: ID!): Payment
 }
 
 input SignUpInput {
@@ -40,17 +58,17 @@ input SignUpInput {
 }
 
 type Subscription {
-  postAdded: Post!
+  paymentCreated: Payment!
 }
 
 type User {
-  comments: [Comment!]!
   createdAt: DateTime!
   email: String!
   emailVerified: Boolean!
   hashedPassword: String!
+  households: [Household!]!
   id: ID!
   name: String!
-  posts: [Post!]!
+  payments: [Payment!]!
   updatedAt: DateTime!
 }

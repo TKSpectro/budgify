@@ -10,7 +10,7 @@ builder.prismaObject('User', {
     emailVerified: t.exposeBoolean('emailVerified'),
     createdAt: t.expose('createdAt', { type: 'DateTime' }),
     updatedAt: t.expose('updatedAt', { type: 'DateTime' }),
-    posts: t.relation('posts'),
-    comments: t.relation('comments'),
+    households: t.relation('households'),
+    payments: t.relation('payments'),
   }),
 });

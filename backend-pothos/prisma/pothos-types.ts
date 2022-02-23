@@ -1,56 +1,64 @@
-import type { Prisma, User, Post, Comment } from "/home/spectro/dev/budgify/backend-pothos/node_modules/.pnpm/@prisma+client@3.9.2_prisma@3.9.2/node_modules/@prisma/client";
+import type { Prisma, User, Payment, Household } from "/home/spectro/dev/budgify/backend-pothos/node_modules/.pnpm/@prisma+client@3.9.2_prisma@3.9.2/node_modules/@prisma/client";
 export default interface PrismaTypes {
     User: {
         Name: "User";
         Shape: User;
         Include: Prisma.UserInclude;
         Where: Prisma.UserWhereUniqueInput;
-        Fields: "posts" | "comments";
-        ListRelations: "posts" | "comments";
+        Fields: "households" | "ownedHouseholds" | "payments";
+        ListRelations: "households" | "ownedHouseholds" | "payments";
         Relations: {
-            posts: {
-                Shape: Post[];
-                Types: PrismaTypes["Post"];
+            households: {
+                Shape: Household[];
+                Types: PrismaTypes["Household"];
             };
-            comments: {
-                Shape: Comment[];
-                Types: PrismaTypes["Comment"];
+            ownedHouseholds: {
+                Shape: Household[];
+                Types: PrismaTypes["Household"];
+            };
+            payments: {
+                Shape: Payment[];
+                Types: PrismaTypes["Payment"];
             };
         };
     };
-    Post: {
-        Name: "Post";
-        Shape: Post;
-        Include: Prisma.PostInclude;
-        Where: Prisma.PostWhereUniqueInput;
-        Fields: "author" | "comments";
-        ListRelations: "comments";
-        Relations: {
-            author: {
-                Shape: User;
-                Types: PrismaTypes["User"];
-            };
-            comments: {
-                Shape: Comment[];
-                Types: PrismaTypes["Comment"];
-            };
-        };
-    };
-    Comment: {
-        Name: "Comment";
-        Shape: Comment;
-        Include: Prisma.CommentInclude;
-        Where: Prisma.CommentWhereUniqueInput;
-        Fields: "author" | "post";
+    Payment: {
+        Name: "Payment";
+        Shape: Payment;
+        Include: Prisma.PaymentInclude;
+        Where: Prisma.PaymentWhereUniqueInput;
+        Fields: "user" | "household";
         ListRelations: never;
         Relations: {
-            author: {
+            user: {
                 Shape: User;
                 Types: PrismaTypes["User"];
             };
-            post: {
-                Shape: Post;
-                Types: PrismaTypes["Post"];
+            household: {
+                Shape: Household;
+                Types: PrismaTypes["Household"];
+            };
+        };
+    };
+    Household: {
+        Name: "Household";
+        Shape: Household;
+        Include: Prisma.HouseholdInclude;
+        Where: Prisma.HouseholdWhereUniqueInput;
+        Fields: "owner" | "members" | "payments";
+        ListRelations: "members" | "payments";
+        Relations: {
+            owner: {
+                Shape: User;
+                Types: PrismaTypes["User"];
+            };
+            members: {
+                Shape: User[];
+                Types: PrismaTypes["User"];
+            };
+            payments: {
+                Shape: Payment[];
+                Types: PrismaTypes["Payment"];
             };
         };
     };

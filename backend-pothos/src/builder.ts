@@ -15,6 +15,8 @@ export const builder = new SchemaBuilder<{
   PrismaTypes: PrismaTypes;
   Context: Context;
   Scalars: {
+    // Force ID to be always a string as we only use UUIDs
+    ID: { Input: string; Output: string | number };
     DateTime: { Input: Date; Output: Date };
   };
   AuthScopes: {

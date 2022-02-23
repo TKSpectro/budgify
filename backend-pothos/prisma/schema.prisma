@@ -13,31 +13,38 @@ generator pothos {
 }
 
 model User {
-  id             String    @id @default(uuid())
-  name           String
-  email          String    @unique
-  emailVerified  Boolean   @default(false)
-  hashedPassword String
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  posts          Post[]
-  comments       Comment[]
+  id              String      @id @default(uuid())
+  name            String
+  email           String      @unique
+  emailVerified   Boolean     @default(false)
+  hashedPassword  String
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  households      Household[]
+  ownedHouseholds Household[] @relation("Owner")
+  payments        Payment[]
 }
 
-model Post {
-  id       Int       @id @default(autoincrement())
-  title    String
-  content  String
-  author   User      @relation(fields: [authorId], references: [id])
-  authorId String
-  comments Comment[]
+model Payment {
+  id          String    @id @default(uuid())
+  name        String
+  value       Int
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String
+  household   Household @relation(fields: [householdId], references: [id])
+  householdId String
 }
 
-model Comment {
-  id       Int    @id @default(autoincrement())
-  comment  String
-  author   User   @relation(fields: [authorId], references: [id])
-  authorId String
-  post     Post   @relation(fields: [postId], references: [id])
-  postId   Int
+model Household {
+  id        String    @id @default(uuid())
+  name      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  owner     User      @relation("Owner", fields: [ownerId], references: [id])
+  ownerId   String
+  members   User[]
+  payments  Payment[]
 }

@@ -14,10 +14,11 @@ import useColorScheme from '../hooks/useColorScheme';
 import LoginScreen from '../screens/Auth/LoginScreen';
 import ResetPasswordScreen from '../screens/Auth/ResetPasswordScreen';
 import SignUpScreen from '../screens/Auth/SignUpScreen';
+import HomeScreen from '../screens/HomeScreen';
+import HouseholdScreen from '../screens/HouseholdScreen';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import ProfileScreen from '../screens/ProfileScreen';
-import TabOneScreen from '../screens/TabOneScreen';
 import { RootStackParamList, RootTabParamList } from '../types';
 import { AuthContext } from './auth';
 
@@ -60,26 +61,38 @@ function RootNavigator() {
   );
 }
 
+const HomeStack = () => {
+  const MyStack = createNativeStackNavigator();
+
+  return (
+    <MyStack.Navigator screenOptions={{ headerShown: false }}>
+      <MyStack.Screen name='Home' component={HomeScreen} />
+      <MyStack.Screen name='Household' component={HouseholdScreen} />
+    </MyStack.Navigator>
+  );
+};
+
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 function BottomTabNavigator() {
   const colorScheme = useColorScheme();
 
   return (
     <BottomTab.Navigator
-      initialRouteName='Profile'
+      initialRouteName='HomeStack'
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
         headerShown: false,
       }}
     >
       <BottomTab.Screen
-        name='TabOne'
-        component={TabOneScreen}
+        name='HomeStack'
+        component={HomeStack}
         options={{
-          title: 'Tab One',
+          title: 'Home',
           tabBarIcon: ({ color }) => <TabBarIcon name='book' color={color} />,
         }}
       />
+
       <BottomTab.Screen
         name='Profile'
         component={ProfileScreen}
