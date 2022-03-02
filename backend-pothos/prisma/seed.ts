@@ -10,7 +10,16 @@ async function main() {
   const user = await prisma.user.create({
     data: {
       name: 'Tom Käppler',
-      email: 'tom@web.de',
+      email: 'tom@mail.com',
+      hashedPassword: hashSync('123123123', 10),
+      emailVerified: true,
+    },
+  });
+
+  const user2 = await prisma.user.create({
+    data: {
+      name: faker.name.findName(),
+      email: 'user@mail.com',
       hashedPassword: hashSync('123123123', 10),
       emailVerified: true,
     },
@@ -20,7 +29,7 @@ async function main() {
     data: {
       name: 'My Household',
       owner: { connect: { id: user.id } },
-      members: { connect: { id: user.id } },
+      members: { connect: [{ id: user.id }, { id: user2.id }] },
       payments: {
         createMany: {
           data: [

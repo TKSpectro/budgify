@@ -13,16 +13,18 @@ generator pothos {
 }
 
 model User {
-  id              String      @id @default(uuid())
-  name            String
-  email           String      @unique
-  emailVerified   Boolean     @default(false)
-  hashedPassword  String
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
-  households      Household[]
-  ownedHouseholds Household[] @relation("Owner")
-  payments        Payment[]
+  id               String      @id @default(uuid())
+  name             String
+  email            String      @unique
+  emailVerified    Boolean     @default(false)
+  hashedPassword   String
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  households       Household[]
+  ownedHouseholds  Household[] @relation("Owner")
+  payments         Payment[]
+  receivedMessages Message[]   @relation("MessageReceiver")
+  sentMessages     Message[]   @relation("MessageSender")
 }
 
 model Payment {
@@ -47,4 +49,20 @@ model Household {
   ownerId   String
   members   User[]
   payments  Payment[]
+  messages  Message[]
+}
+
+model Message {
+  id          String     @id @default(uuid())
+  text        String
+  // TODO: Add possibility for pictures and videos
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  deletedAt   DateTime?
+  sender      User       @relation("MessageSender", fields: [senderId], references: [id])
+  senderId    String
+  receiver    User?      @relation("MessageReceiver", fields: [receiverId], references: [id])
+  receiverId  String?
+  household   Household? @relation(fields: [householdId], references: [id])
+  householdId String?
 }

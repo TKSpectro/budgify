@@ -1,12 +1,12 @@
-import type { Prisma, User, Payment, Household } from "/home/spectro/dev/budgify/backend-pothos/node_modules/.pnpm/@prisma+client@3.9.2_prisma@3.9.2/node_modules/@prisma/client";
+import type { Prisma, User, Payment, Household, Message } from "/home/spectro/dev/budgify/backend-pothos/node_modules/.pnpm/@prisma+client@3.9.2_prisma@3.9.2/node_modules/@prisma/client";
 export default interface PrismaTypes {
     User: {
         Name: "User";
         Shape: User;
         Include: Prisma.UserInclude;
         Where: Prisma.UserWhereUniqueInput;
-        Fields: "households" | "ownedHouseholds" | "payments";
-        ListRelations: "households" | "ownedHouseholds" | "payments";
+        Fields: "households" | "ownedHouseholds" | "payments" | "receivedMessages" | "sentMessages";
+        ListRelations: "households" | "ownedHouseholds" | "payments" | "receivedMessages" | "sentMessages";
         Relations: {
             households: {
                 Shape: Household[];
@@ -19,6 +19,14 @@ export default interface PrismaTypes {
             payments: {
                 Shape: Payment[];
                 Types: PrismaTypes["Payment"];
+            };
+            receivedMessages: {
+                Shape: Message[];
+                Types: PrismaTypes["Message"];
+            };
+            sentMessages: {
+                Shape: Message[];
+                Types: PrismaTypes["Message"];
             };
         };
     };
@@ -45,8 +53,8 @@ export default interface PrismaTypes {
         Shape: Household;
         Include: Prisma.HouseholdInclude;
         Where: Prisma.HouseholdWhereUniqueInput;
-        Fields: "owner" | "members" | "payments";
-        ListRelations: "members" | "payments";
+        Fields: "owner" | "members" | "payments" | "messages";
+        ListRelations: "members" | "payments" | "messages";
         Relations: {
             owner: {
                 Shape: User;
@@ -59,6 +67,32 @@ export default interface PrismaTypes {
             payments: {
                 Shape: Payment[];
                 Types: PrismaTypes["Payment"];
+            };
+            messages: {
+                Shape: Message[];
+                Types: PrismaTypes["Message"];
+            };
+        };
+    };
+    Message: {
+        Name: "Message";
+        Shape: Message;
+        Include: Prisma.MessageInclude;
+        Where: Prisma.MessageWhereUniqueInput;
+        Fields: "sender" | "receiver" | "household";
+        ListRelations: never;
+        Relations: {
+            sender: {
+                Shape: User;
+                Types: PrismaTypes["User"];
+            };
+            receiver: {
+                Shape: User | null;
+                Types: PrismaTypes["User"];
+            };
+            household: {
+                Shape: Household | null;
+                Types: PrismaTypes["Household"];
             };
         };
     };

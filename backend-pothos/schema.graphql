@@ -2,6 +2,12 @@ input CreateHousehold {
   name: String!
 }
 
+input CreateMessage {
+  householdId: ID
+  receiverId: ID
+  text: String!
+}
+
 input CreatePayment {
   description: String
   householdId: ID!
@@ -26,8 +32,20 @@ input LoginInput {
   password: String!
 }
 
+type Message {
+  createdAt: DateTime!
+  deletedAt: DateTime
+  household: Household
+  id: ID!
+  receiver: User
+  sender: User!
+  text: String!
+  updatedAt: DateTime!
+}
+
 type Mutation {
   createHousehold(input: CreateHousehold!): Household!
+  createMessage(input: CreateMessage!): Message!
   createPayment(input: CreatePayment!): Payment!
   login(input: LoginInput!): String!
   signUp(input: SignUpInput!): String!
@@ -45,6 +63,8 @@ type Payment {
 }
 
 type Query {
+  """Retrieve a chat with either an other user or a household"""
+  chat(householdId: ID!, receiverId: ID!): [Message!]!
   household(id: ID!): Household
   households: [Household!]
   me: User
@@ -58,6 +78,7 @@ input SignUpInput {
 }
 
 type Subscription {
+  messageSent: Message!
   paymentCreated: Payment!
 }
 
