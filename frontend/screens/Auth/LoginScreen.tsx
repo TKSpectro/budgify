@@ -1,7 +1,7 @@
-import { useContext } from 'react';
+import { Button, Input, Text, View } from 'native-base';
+import React, { useContext } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Button, Dimensions, StyleSheet, TextInput } from 'react-native';
-import { Text, View } from '../../components/Themed';
+import { Dimensions } from 'react-native';
 import { AuthContext } from '../../navigation/auth';
 
 interface Props {
@@ -26,21 +26,31 @@ export default function LoginScreen({ navigation }: Props) {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Sign in</Text>
+    <View
+      // style={styles.container}
+      flex={1}
+      alignItems={'center'}
+      justifyContent={'center'}
+    >
+      <Text fontSize={20} fontWeight='bold'>
+        Sign in
+      </Text>
 
       <Controller
         name='email'
         control={control}
         rules={{ required: true }}
         render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            style={styles.input}
+          <Input
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
             placeholder='Email'
             autoCompleteType='email'
+            w={Dimensions.get('window').width - 50}
+            maxW={512}
+            m={1}
+            borderColor={'#ccc'}
           />
         )}
       />
@@ -51,61 +61,32 @@ export default function LoginScreen({ navigation }: Props) {
         control={control}
         rules={{ required: true }}
         render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
+          <Input
             secureTextEntry={true}
-            style={styles.input}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
             placeholder='Password'
             autoCompleteType='password'
+            w={Dimensions.get('window').width - 50}
+            maxW={512}
+            m={1}
+            borderColor={'#ccc'}
           />
         )}
       />
       {errors.password && <Text>This is required.</Text>}
 
-      <Button title='Sign in' onPress={handleSubmit(onSubmit)} />
+      <Button onPress={handleSubmit(onSubmit)} m={1}>
+        Sign in
+      </Button>
 
-      <Text style={styles.link} onPress={() => navigation.navigate('SignUp')}>
+      <Text onPress={() => navigation.navigate('SignUp')} m={1} p={1}>
         No account? Sign up
       </Text>
-      <Text
-        style={styles.link}
-        onPress={() => navigation.navigate('ResetPassword')}
-      >
+      <Text onPress={() => navigation.navigate('ResetPassword')} m={1} p={1}>
         Forgot your password? Reset it
       </Text>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  input: {
-    width: Dimensions.get('window').width - 50,
-    // TODO: Check for iPad width
-    maxWidth: 512,
-    borderColor: 'white',
-    borderRadius: 4,
-    color: 'white',
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    padding: 10,
-  },
-  link: {
-    borderColor: 'white',
-    color: 'white',
-    margin: 6,
-    borderWidth: 1,
-    padding: 10,
-  },
-});

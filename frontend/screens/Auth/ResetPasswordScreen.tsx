@@ -1,7 +1,7 @@
 import { FontAwesome } from '@expo/vector-icons';
+import { Text, View } from 'native-base';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { Text, View } from '../../components/Themed';
 
 interface Props {
   navigation: any;
@@ -11,7 +11,7 @@ export default function ResetPasswordScreen({ navigation }: Props) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>ResetPassword</Text>
-      <Text style={styles.link} onPress={() => navigation.navigate('SignIn')}>
+      <Text style={styles.link} onPress={() => navigation.navigate('Login')}>
         <FontAwesome name='arrow-left' size={20} />
         Go back
       </Text>

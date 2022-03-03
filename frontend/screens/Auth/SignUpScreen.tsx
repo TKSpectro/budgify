@@ -1,8 +1,8 @@
 import { FontAwesome } from '@expo/vector-icons';
+import { Text, View } from 'native-base';
 import React, { useContext } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Button, Dimensions, StyleSheet, TextInput } from 'react-native';
-import { Text, View } from '../../components/Themed';
 import { AuthContext } from '../../navigation/auth';
 
 type FormDate = {
@@ -89,7 +89,7 @@ export default function SignUpScreen({ navigation }: Props) {
 
       <Button title='Sign up' onPress={handleSubmit(onSubmit)} />
 
-      <Text style={styles.link} onPress={() => navigation.navigate('SignIn')}>
+      <Text style={styles.link} onPress={() => navigation.navigate('Login')}>
         <FontAwesome name='arrow-left' size={20} />
         Go back
       </Text>

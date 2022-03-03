@@ -10,10 +10,9 @@ import { onError } from '@apollo/client/link/error';
 import Constants from 'expo-constants';
 import * as SecureStore from 'expo-secure-store';
 import { StatusBar } from 'expo-status-bar';
+import { extendTheme, NativeBaseProvider } from 'native-base';
 import React from 'react';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useCachedResources from './hooks/useCachedResources';
-import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 import AuthProvider from './navigation/auth';
 
@@ -52,9 +51,31 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+const config = {
+  useSystemColorMode: true,
+
+  initialColorMode: 'light',
+};
+
+const colors = {
+  primary: {
+    50: '#EEF2F6',
+    100: '#CFD9E7',
+    200: '#B1C1D8',
+    300: '#92A9C9',
+    400: '#7491B9',
+    500: '#5578AA',
+    600: '#446088',
+    700: '#334866',
+    800: '#223044',
+    900: '#111822',
+  },
+};
+
+const theme = extendTheme({ config, colors });
+
 export default function App() {
   const isLoadingComplete = useCachedResources();
-  const colorScheme = useColorScheme();
 
   if (!isLoadingComplete) {
     return null;
@@ -62,10 +83,10 @@ export default function App() {
     return (
       <ApolloProvider client={client}>
         <AuthProvider>
-          <SafeAreaProvider>
-            <Navigation colorScheme={colorScheme} />
+          <NativeBaseProvider theme={theme}>
+            <Navigation />
             <StatusBar />
-          </SafeAreaProvider>
+          </NativeBaseProvider>
         </AuthProvider>
       </ApolloProvider>
     );

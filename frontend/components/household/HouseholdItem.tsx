@@ -1,6 +1,6 @@
+import { Text, View } from 'native-base';
 import React from 'react';
-import { Dimensions, StyleSheet, Text } from 'react-native';
-import { View } from '../Themed';
+import { Dimensions, StyleSheet } from 'react-native';
 
 interface Props {
   household: {
@@ -20,7 +20,6 @@ export const HouseholdItem = ({ household }: Props) => {
 export const styles = StyleSheet.create({
   item: {
     flexDirection: 'row',
-    borderColor: '#9ca3af',
     borderWidth: 2,
     borderRadius: 10,
     padding: 10,
@@ -30,12 +29,10 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   title: {
-    color: '#2dd4bf',
     fontSize: 20,
     fontWeight: 'bold',
   },
   date: {
-    color: '#2dd4bf',
     fontSize: 20,
     marginLeft: 8,
   },
@@ -46,7 +43,6 @@ export const styles = StyleSheet.create({
     marginLeft: 8,
   },
   buttonText: {
-    color: '#f87171',
     fontSize: 20,
     fontWeight: 'bold',
   },

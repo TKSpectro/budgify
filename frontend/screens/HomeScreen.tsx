@@ -1,12 +1,7 @@
 import { gql, useQuery } from '@apollo/client';
+import { FlatList, Text } from 'native-base';
 import React from 'react';
-import {
-  FlatList,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-} from 'react-native';
+import { StatusBar, StyleSheet, TouchableHighlight } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { HouseholdItem } from '../components/household/HouseholdItem';
 import { HomeStackScreenProps } from '../types';

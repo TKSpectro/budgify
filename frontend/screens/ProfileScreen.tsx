@@ -1,8 +1,8 @@
 import { gql, useQuery } from '@apollo/client';
 import * as SecureStore from 'expo-secure-store';
+import { Button, Text, useColorMode, View } from 'native-base';
 import React, { useContext } from 'react';
-import { Button, StyleSheet } from 'react-native';
-import { Text, View } from '../components/Themed';
+import { StyleSheet } from 'react-native';
 import { AuthContext } from '../navigation/auth';
 
 const GET_ME = gql`
@@ -18,6 +18,7 @@ const GET_ME = gql`
 
 export default function ProfileScreen() {
   const { signOut } = useContext(AuthContext);
+  const { toggleColorMode, colorMode } = useColorMode();
 
   const { data, client } = useQuery(GET_ME);
   const me = data?.me;
@@ -32,7 +33,8 @@ export default function ProfileScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>Profile</Text>
       <Text style={styles.title}>{JSON.stringify(me, null, 2)}</Text>
-      <Button title='Logout' onPress={handleLogout} />
+      <Button onPress={handleLogout}>Logout</Button>
+      <Button onPress={toggleColorMode}>{colorMode}</Button>
     </View>
   );
 }
