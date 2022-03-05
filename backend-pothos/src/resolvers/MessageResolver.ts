@@ -1,4 +1,4 @@
-import { ApolloError } from 'apollo-server-express';
+import { withFilter } from 'graphql-subscriptions';
 import { builder } from '../builder';
 import { pubsub } from '../server';
 import { prisma } from '../utils/prisma';
@@ -18,24 +18,17 @@ builder.prismaObject('Message', {
 });
 
 builder.queryFields((t) => ({
-  chat: t.prismaField({
+  messages: t.prismaField({
     type: ['Message'],
     description: 'Retrieve a chat with either an other user or a household',
     args: {
-      receiverId: t.arg.id(),
       householdId: t.arg.id(),
     },
     resolve: (query, root, args, ctx) => {
-      if (!args.receiverId && !args.householdId) {
-        // TODO: Check if there is an explicit Input Error
-        throw new ApolloError('You need to pass at least one of the arguments');
-      }
-
       return prisma.message.findMany({
         ...query,
         where: {
           senderId: ctx.user?.id,
-          receiverId: args.receiverId,
           householdId: args.householdId,
         },
       });
@@ -81,16 +74,25 @@ builder.mutationFields((t) => ({
   }),
 }));
 
+const MessageSentInput = builder.inputType('MessageSent', {
+  fields: (t) => ({
+    householdId: t.id(),
+  }),
+});
+
 builder.subscriptionField('messageSent', (t) => {
   return t.prismaField({
     type: 'Message',
-    subscribe: () => {
-      return {
-        [Symbol.asyncIterator]() {
-          return pubsub.asyncIterator('messageSent');
-        },
-      };
-    },
+    args: { input: t.arg({ type: MessageSentInput }) },
+    subscribe: withFilter(
+      () => pubsub.asyncIterator('messageSent'),
+      async (payload, variables) => {
+        const test = await payload.message;
+
+        return test.householdId === variables.input.householdId;
+      },
+    ),
+
     resolve: (_, payload: any) => {
       return payload?.message;
     },

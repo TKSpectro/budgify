@@ -4,9 +4,12 @@ import {
   createHttpLink,
   from,
   InMemoryCache,
+  split,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
+import { WebSocketLink } from '@apollo/client/link/ws';
+import { getMainDefinition } from '@apollo/client/utilities';
 import Constants from 'expo-constants';
 import * as SecureStore from 'expo-secure-store';
 import { StatusBar } from 'expo-status-bar';
@@ -18,6 +21,13 @@ import Navigation from './navigation';
 import AuthProvider from './navigation/auth';
 
 const httpLink = createHttpLink({ uri: Constants.manifest?.extra?.apiUrl });
+const wsLink = new WebSocketLink({
+  uri: Constants.manifest?.extra?.wsUrl,
+  options: {
+    lazy: true,
+    connectionCallback: () => console.log('connected ws'),
+  },
+});
 const authLink = setContext(async (_, { headers }) => {
   const token = await SecureStore.getItemAsync('token');
 
@@ -46,9 +56,21 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (networkError) console.log(`[Network error]: ${networkError}`);
 });
 
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === 'OperationDefinition' &&
+      definition.operation === 'subscription'
+    );
+  },
+  wsLink,
+  httpLink,
+);
+
 // Initialize Apollo Client
 const client = new ApolloClient({
-  link: from([authLink, errorLink, httpLink]),
+  link: from([authLink, errorLink, splitLink]),
   cache: new InMemoryCache(),
 });
 

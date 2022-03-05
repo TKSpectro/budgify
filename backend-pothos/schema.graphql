@@ -21,6 +21,7 @@ type Household {
   createdAt: DateTime!
   id: ID!
   members: [User!]!
+  messages: [Message!]!
   name: String!
   owner: User!
   payments: [Payment!]!
@@ -43,6 +44,10 @@ type Message {
   updatedAt: DateTime!
 }
 
+input MessageSent {
+  householdId: ID!
+}
+
 type Mutation {
   createHousehold(input: CreateHousehold!): Household!
   createMessage(input: CreateMessage!): Message!
@@ -63,11 +68,12 @@ type Payment {
 }
 
 type Query {
-  """Retrieve a chat with either an other user or a household"""
-  chat(householdId: ID!, receiverId: ID!): [Message!]!
   household(id: ID!): Household
   households: [Household!]
   me: User
+
+  """Retrieve a chat with either an other user or a household"""
+  messages(householdId: ID!): [Message!]!
   payment(id: ID!): Payment
 }
 
@@ -78,7 +84,7 @@ input SignUpInput {
 }
 
 type Subscription {
-  messageSent: Message!
+  messageSent(input: MessageSent!): Message!
   paymentCreated: Payment!
 }
 

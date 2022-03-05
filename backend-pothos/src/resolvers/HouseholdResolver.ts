@@ -11,6 +11,7 @@ builder.prismaObject('Household', {
     owner: t.relation('owner'),
     members: t.relation('members'),
     payments: t.relation('payments'),
+    messages: t.relation('messages'),
   }),
 });
 
