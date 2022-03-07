@@ -21,7 +21,7 @@ export default function Input({
   defaultValue,
   ...props
 }: InputProps) {
-  const { field } = useController({
+  const { field, fieldState } = useController({
     name,
     rules,
     defaultValue,
@@ -38,7 +38,9 @@ export default function Input({
         {...props}
       />
 
-      {/* {errors[name] && <Text>This is required.</Text>} */}
+      {fieldState.error && (
+        <Text style={styles.error}>{fieldState.error.message}</Text>
+      )}
     </View>
   );
 }
@@ -46,10 +48,16 @@ export default function Input({
 const styles = StyleSheet.create({
   label: { color: '#ccc' },
   input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 6,
-    color: '#ccc',
     width: Dimensions.get('window').width - 50,
+    // TODO: Check for iPad width
+    maxWidth: 512,
+    borderColor: 'white',
+    borderRadius: 4,
+    color: 'white',
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
   },
+  error: { color: 'red', marginLeft: 12, marginBottom: 12 },
 });
