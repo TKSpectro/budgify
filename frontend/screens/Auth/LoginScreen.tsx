@@ -1,7 +1,8 @@
 import { useContext } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Button, Dimensions, StyleSheet, TextInput } from 'react-native';
-import { Text, View } from '../../components/Themed';
+import { Text } from '../../components/Themed';
+import { Container } from '../../components/UI/Container';
 import { AuthContext } from '../../navigation/auth';
 
 interface Props {
@@ -26,7 +27,7 @@ export default function LoginScreen({ navigation }: Props) {
   };
 
   return (
-    <View style={styles.container}>
+    <Container>
       <Text style={styles.title}>Sign in</Text>
 
       <Controller
@@ -75,16 +76,11 @@ export default function LoginScreen({ navigation }: Props) {
       >
         Forgot your password? Reset it
       </Text>
-    </View>
+    </Container>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   title: {
     fontSize: 20,
     fontWeight: 'bold',

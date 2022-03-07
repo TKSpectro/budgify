@@ -1,7 +1,7 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
 import React, { useEffect } from 'react';
-import { Button, ScrollView, StatusBar, StyleSheet, Text } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Button, ScrollView, StyleSheet, Text } from 'react-native';
+import { Container } from '../components/UI/Container';
 import { HomeStackScreenProps } from '../types';
 
 const GET_HOUSEHOLD = gql`
@@ -80,7 +80,7 @@ export default function HouseholdScreen({
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <Container>
       <Text style={styles.text}>{household?.name}</Text>
       <ScrollView>
         <Text style={styles.text}>{JSON.stringify(household, null, 2)}</Text>
@@ -98,17 +98,11 @@ export default function HouseholdScreen({
           });
         }}
       />
-    </SafeAreaView>
+    </Container>
   );
 }
 
 export const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: StatusBar.currentHeight || 0,
-  },
   text: {
     color: 'white',
   },

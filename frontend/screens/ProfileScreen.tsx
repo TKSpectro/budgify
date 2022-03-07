@@ -2,7 +2,8 @@ import { gql, useQuery } from '@apollo/client';
 import * as SecureStore from 'expo-secure-store';
 import React, { useContext } from 'react';
 import { Button, StyleSheet } from 'react-native';
-import { Text, View } from '../components/Themed';
+import { Text } from '../components/Themed';
+import { Container } from '../components/UI/Container';
 import { AuthContext } from '../navigation/auth';
 
 const GET_ME = gql`
@@ -29,20 +30,15 @@ export default function ProfileScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <Container>
       <Text style={styles.title}>Profile</Text>
       <Text style={styles.title}>{JSON.stringify(me, null, 2)}</Text>
       <Button title='Logout' onPress={handleLogout} />
-    </View>
+    </Container>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   title: {
     fontSize: 20,
     fontWeight: 'bold',

@@ -1,14 +1,8 @@
 import { gql, useQuery } from '@apollo/client';
 import React from 'react';
-import {
-  FlatList,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { FlatList, StyleSheet, Text, TouchableHighlight } from 'react-native';
 import { HouseholdItem } from '../components/household/HouseholdItem';
+import { Container } from '../components/UI/Container';
 import { HomeStackScreenProps } from '../types';
 
 const GET_HOUSEHOLDS = gql`
@@ -30,7 +24,7 @@ export default function HomeScreen({
   const households = data?.me?.households;
 
   return (
-    <SafeAreaView style={styles.container}>
+    <Container>
       <FlatList
         data={households}
         renderItem={({ item }) => (
@@ -47,17 +41,11 @@ export default function HomeScreen({
           <Text style={styles.notFound}>No Households found</Text>
         }
       />
-    </SafeAreaView>
+    </Container>
   );
 }
 
 export const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: StatusBar.currentHeight || 0,
-  },
   notFound: {
     borderColor: '#9ca3af',
     borderWidth: 2,

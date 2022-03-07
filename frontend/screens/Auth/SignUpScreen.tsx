@@ -2,7 +2,8 @@ import { FontAwesome } from '@expo/vector-icons';
 import React, { useContext } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Button, Dimensions, StyleSheet, TextInput } from 'react-native';
-import { Text, View } from '../../components/Themed';
+import { Text } from '../../components/Themed';
+import { Container } from '../../components/UI/Container';
 import { AuthContext } from '../../navigation/auth';
 
 type FormDate = {
@@ -30,7 +31,7 @@ export default function SignUpScreen({ navigation }: Props) {
   };
 
   return (
-    <View style={styles.container}>
+    <Container>
       <Text style={styles.title}>SignUp</Text>
 
       <Controller
@@ -93,16 +94,11 @@ export default function SignUpScreen({ navigation }: Props) {
         <FontAwesome name='arrow-left' size={20} />
         Go back
       </Text>
-    </View>
+    </Container>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
