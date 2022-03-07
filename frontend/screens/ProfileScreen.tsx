@@ -33,7 +33,6 @@ export default function ProfileScreen() {
       <Text style={styles.title}>Profile</Text>
       <Text style={styles.title}>{JSON.stringify(me, null, 2)}</Text>
       <Button title='Logout' onPress={handleLogout} />
-      <Button title='Switch theme' onPress={() => {}} />
     </View>
   );
 }
