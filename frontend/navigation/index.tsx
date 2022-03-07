@@ -1,5 +1,3 @@
-import { FontAwesome } from '@expo/vector-icons';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
   DarkTheme,
   DefaultTheme,
@@ -9,18 +7,14 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
 import { useContext } from 'react';
 import { ColorSchemeName } from 'react-native';
-import Colors from '../constants/Colors';
-import useColorScheme from '../hooks/useColorScheme';
 import LoginScreen from '../screens/Auth/LoginScreen';
 import ResetPasswordScreen from '../screens/Auth/ResetPasswordScreen';
 import SignUpScreen from '../screens/Auth/SignUpScreen';
-import HomeScreen from '../screens/HomeScreen';
-import HouseholdScreen from '../screens/HouseholdScreen';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
-import ProfileScreen from '../screens/ProfileScreen';
-import { RootStackParamList, RootTabParamList } from '../types';
+import { RootStackParamList } from '../types';
 import { AuthContext } from './auth';
+import { BottomTabNavigator } from './BottomTab';
 
 export default function Navigation({
   colorScheme,
@@ -59,59 +53,4 @@ function RootNavigator() {
       </Stack.Group>
     </Stack.Navigator>
   );
-}
-
-const HomeStack = () => {
-  const MyStack = createNativeStackNavigator();
-
-  return (
-    <MyStack.Navigator screenOptions={{ headerShown: false }}>
-      <MyStack.Screen name='Home' component={HomeScreen} />
-      <MyStack.Screen name='Household' component={HouseholdScreen} />
-    </MyStack.Navigator>
-  );
-};
-
-const BottomTab = createBottomTabNavigator<RootTabParamList>();
-function BottomTabNavigator() {
-  const colorScheme = useColorScheme();
-
-  return (
-    <BottomTab.Navigator
-      initialRouteName='HomeStack'
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme].tint,
-        headerShown: false,
-      }}
-    >
-      <BottomTab.Screen
-        name='HomeStack'
-        component={HomeStack}
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <TabBarIcon name='book' color={color} />,
-        }}
-      />
-
-      <BottomTab.Screen
-        name='Profile'
-        component={ProfileScreen}
-        options={{
-          title: 'Profile',
-          // TODO: Maybe use the user avatar here?
-          tabBarIcon: ({ color }) => <TabBarIcon name='user-o' color={color} />,
-        }}
-      />
-    </BottomTab.Navigator>
-  );
-}
-
-/**
- * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
- */
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
 }
