@@ -1,4 +1,3 @@
-import { withFilter } from 'graphql-subscriptions';
 import { builder } from '../builder';
 import { pubsub } from '../server';
 import { prisma } from '../utils/prisma';
@@ -84,17 +83,15 @@ builder.subscriptionField('messageSent', (t) => {
   return t.prismaField({
     type: 'Message',
     args: { input: t.arg({ type: MessageSentInput }) },
-    subscribe: withFilter(
-      () => pubsub.asyncIterator('messageSent'),
-      async (payload, variables) => {
-        const test = await payload.message;
-
-        return test.householdId === variables.input.householdId;
-      },
-    ),
-
+    subscribe: (_, {}, ctx, _info) => {
+      return {
+        [Symbol.asyncIterator]() {
+          return pubsub.asyncIterator('messageSent');
+        },
+      };
+    },
     resolve: (_, payload: any) => {
-      return payload?.message;
+      return payload.message;
     },
   });
 });

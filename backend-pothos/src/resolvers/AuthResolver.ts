@@ -2,6 +2,25 @@ import { builder } from '../builder';
 import { authenticateUser, createJWT, hashPassword } from '../utils/auth';
 import { prisma } from '../utils/prisma';
 
+class AuthPayload {
+  id: string;
+  token: string;
+
+  constructor(id: string, token: string) {
+    this.id = id;
+    this.token = token;
+  }
+}
+
+builder.objectType(AuthPayload, {
+  name: 'AuthPayload',
+  description: 'The payload returned from the login mutation',
+  fields: (t) => ({
+    id: t.exposeString('id'),
+    token: t.exposeString('token'),
+  }),
+});
+
 builder.queryField('me', (t) =>
   t.prismaField({
     type: 'User',
@@ -30,7 +49,7 @@ const LoginInput = builder.inputType('LoginInput', {
 
 builder.mutationField('login', (t) =>
   t.field({
-    type: 'String',
+    type: AuthPayload,
     skipTypeScopes: true,
     authScopes: {
       unauthenticated: true,
@@ -54,7 +73,10 @@ builder.mutationField('login', (t) =>
         }
       }
 
-      return createJWT({ id: authenticatedUser.id });
+      return {
+        id: authenticatedUser.id,
+        token: await createJWT({ id: authenticatedUser.id }),
+      };
     },
   }),
 );
@@ -74,7 +96,7 @@ const SignUpInput = builder.inputType('SignUpInput', {
 
 builder.mutationField('signUp', (t) =>
   t.field({
-    type: 'String',
+    type: AuthPayload,
     skipTypeScopes: true,
     authScopes: {
       unauthenticated: true,
@@ -100,7 +122,10 @@ builder.mutationField('signUp', (t) =>
         }
       }
 
-      return createJWT({ id: user.id });
+      return {
+        id: user.id,
+        token: await createJWT({ id: user.id }),
+      };
     },
   }),
 );

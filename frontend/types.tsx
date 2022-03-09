@@ -42,6 +42,7 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
 export type HomeStackParamList = {
   Home: undefined;
   Household: { id: string };
+  HouseholdChat: { id: string };
 };
 
 export type HomeStackScreenProps<Screen extends keyof HomeStackParamList> =

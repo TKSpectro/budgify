@@ -1,3 +1,9 @@
+"""The payload returned from the login mutation"""
+type AuthPayload {
+  id: String!
+  token: String!
+}
+
 input CreateHousehold {
   name: String!
 }
@@ -52,8 +58,8 @@ type Mutation {
   createHousehold(input: CreateHousehold!): Household!
   createMessage(input: CreateMessage!): Message!
   createPayment(input: CreatePayment!): Payment!
-  login(input: LoginInput!): String!
-  signUp(input: SignUpInput!): String!
+  login(input: LoginInput!): AuthPayload!
+  signUp(input: SignUpInput!): AuthPayload!
 }
 
 type Payment {

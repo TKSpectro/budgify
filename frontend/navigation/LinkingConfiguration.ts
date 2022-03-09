@@ -18,6 +18,7 @@ const linking: LinkingOptions<RootStackParamList> = {
             screens: {
               HomeScreen: 'home',
               HouseholdScreen: 'household',
+              HouseholdChatScreen: 'householdChat',
             },
           },
           Profile: {
